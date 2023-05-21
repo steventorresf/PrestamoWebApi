@@ -13,23 +13,27 @@ namespace Application.Implementations
             _tablaDetalleRepository = tablaDetalleRepository;
         }
 
-        public async Task<IEnumerable<TablaDetalleItemDTO>> GetTablaDetallePorCodigos(IList<long> tablasIds)
+        public async Task<IEnumerable<TablaDetalleItemDTO>> GetTablaDetallePorCodigos(string codigos)
         {
-            
+            string[] arrayCodigos = codigos.Split(',', StringSplitOptions.RemoveEmptyEntries);
             IList<TablaDetalleItemDTO> response = new List<TablaDetalleItemDTO>();
-            foreach (long tablaId in tablasIds)
+            foreach (string item in arrayCodigos)
             {
-                IEnumerable<TablaDetalle> lista = await _tablaDetalleRepository.GetTablaDetalle(tablaId);
-                response.Add(new()
+                long tablaId = 0;
+                if(long.TryParse(item, out tablaId))
                 {
-                    TablaId = tablaId,
-                    Listado = lista.Select(x => new TablaDetalleDTO()
+                    IEnumerable<TablaDetalle> lista = await _tablaDetalleRepository.GetTablaDetalle(tablaId);
+                    response.Add(new()
                     {
-                        TablaDetalleId = x.TablaDetalleId,
-                        Codigo = x.Codigo,
-                        Descripcion = x.Descripcion
-                    })
-                });
+                        TablaId = tablaId,
+                        Listado = lista.Select(x => new TablaDetalleDTO()
+                        {
+                            TablaDetalleId = x.TablaDetalleId,
+                            Codigo = x.Codigo,
+                            Descripcion = x.Descripcion
+                        })
+                    });
+                }
             }
             return response;
         }

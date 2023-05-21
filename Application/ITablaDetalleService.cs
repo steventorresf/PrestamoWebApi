@@ -4,6 +4,6 @@ namespace Application
 {
     public interface ITablaDetalleService
     {
-        Task<IEnumerable<TablaDetalleItemDTO>> GetTablaDetallePorCodigos(IList<long> tablasIds);
+        Task<IEnumerable<TablaDetalleItemDTO>> GetTablaDetallePorCodigos(string codigos);
     }
 }

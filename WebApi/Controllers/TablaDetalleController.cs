@@ -22,13 +22,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                string[] arrayList = codigos.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                List<long> tablasIds = new();
-                foreach(string item in arrayList)
-                {
-                    tablasIds.Add(long.Parse(item));
-                }
-                var result = await _tablaDetalleService.GetTablaDetallePorCodigos(tablasIds);
+                var result = await _tablaDetalleService.GetTablaDetallePorCodigos(codigos);
 
                 var response = new ResponseData<IEnumerable<TablaDetalleItemDTO>>(result);
                 return StatusCode((int)response.StatusCode, response);

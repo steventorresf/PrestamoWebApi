@@ -3,7 +3,6 @@ using Application.Implementations;
 using Domain.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Persistence;
@@ -21,7 +20,7 @@ string _corsConfiguration = "_corsConfiguration";
 builder.Services.AddCors();
 builder.Services.AddDbContext<BaseContext>(options =>
 {
-    options.UseSqlServer("Data Source=(local);Initial Catalog=PrestamoFacil;Integrated Security=True;");
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:PrestamistaDbContext"]);
 });
 
 builder.Services.AddScoped<IClienteService, ClienteService>();
