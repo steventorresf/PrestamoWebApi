@@ -12,9 +12,9 @@ namespace Persistence.Implementations
             _context = context;
         }
 
-        public async Task<IEnumerable<TablaDetalle>> GetTablaDetalle(long tablaId)
+        public async Task<List<TablaDetalle>> GetTablaDetalle(long tablaId)
         {
-            IEnumerable<TablaDetalle> lista = await _context.TablaDetalle
+            List<TablaDetalle> lista = await _context.TablaDetalle
                 .Where(t => t.TablaId == tablaId && t.Visible)
                 .OrderBy(c => c.Descripcion)
                 .OrderBy(c => c.Orden)

@@ -1,6 +1,8 @@
 ﻿using Domain.DTO;
+using Domain.Response;
 using Persistence;
 using Persistence.Entities;
+using System.Collections.Generic;
 
 namespace Application.Implementations
 {
@@ -13,26 +15,33 @@ namespace Application.Implementations
             _prestamoRepository = prestamoRepository;
         }
 
-        public async Task<IEnumerable<PrestamoDTO>> GetPrestamosByClienteId(long clienteId)
+        public async Task<ResponseData<ResponseListItem<PrestamoDTO>>> GetPrestamosByClienteId(long clienteId)
         {
-            IEnumerable<Prestamo> lista = await _prestamoRepository.GetPrestamosByClienteId(clienteId);
-            return lista.Select(x => new PrestamoDTO
+            List<Prestamo> lista = await _prestamoRepository.GetPrestamosByClienteId(clienteId);
+            ResponseListItem<PrestamoDTO> list = new()
             {
-                PrestamoId = x.PrestamoId,
-                ClienteId = x.ClienteId,
-                Dias = x.Dias,
-                EstadoId = x.EstadoId,
-                FechaAnulado = x.FechaAnulado,
-                FechaInicio = x.FechaInicio,
-                FechaPrestamo = x.FechaPrestamo,
-                NoCuotas = x.NoCuotas,
-                PeriodoId = x.PeriodoId,
-                Porcentaje = x.Porcentaje,
-                ValorPrestamo = x.ValorPrestamo,
-                Periodo = x.Periodo?.Descripcion ?? string.Empty,
-                Estado = x.Estado?.Descripcion ?? string.Empty,
-                ValorTotal = x.ValorPrestamo + ((x.ValorPrestamo * x.Porcentaje / 100) / 30 * x.Dias),
-            });
+                CountItems = Convert.ToInt64(lista.Count),
+                ListItems = lista.Select(x => new PrestamoDTO
+                {
+                    PrestamoId = x.PrestamoId,
+                    ClienteId = x.ClienteId,
+                    Dias = x.Dias,
+                    EstadoId = x.EstadoId,
+                    FechaAnulado = x.FechaAnulado,
+                    FechaInicio = x.FechaInicio,
+                    FechaPrestamo = x.FechaPrestamo,
+                    NoCuotas = x.NoCuotas,
+                    PeriodoId = x.PeriodoId,
+                    Porcentaje = x.Porcentaje,
+                    ValorPrestamo = x.ValorPrestamo,
+                    Periodo = x.Periodo?.Descripcion ?? string.Empty,
+                    Estado = x.Estado?.Descripcion ?? string.Empty,
+                    ValorTotal = x.ValorPrestamo + ((x.ValorPrestamo * x.Porcentaje / 100) / 30 * x.Dias),
+                })
+            };
+
+            string message = list.CountItems > 0 ? "Los registros han sido obtenidos correctamente." : "No hay registros";
+            return new ResponseData<ResponseListItem<PrestamoDTO>>(list, message);
         }
     }
 }

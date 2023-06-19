@@ -18,19 +18,16 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("by-codigos")]
-        public async Task<IActionResult> GetByCodigo(string codigos)
+        public async Task<ActionResult<ResponseData<List<TablaDetalleItemDTO>>>> GetByCodigo(string codigos)
         {
             try
             {
-                var result = await _tablaDetalleService.GetTablaDetallePorCodigos(codigos);
-
-                var response = new ResponseData<IEnumerable<TablaDetalleItemDTO>>(result);
-                return StatusCode((int)response.StatusCode, response);
+                var response = await _tablaDetalleService.GetTablaDetallePorCodigos(codigos);
+                return StatusCode((int)response.StatusCode, response.StatusCode == HttpStatusCode.OK ? response : response.Message);
             }
             catch (Exception ex)
             {
-                var response = new ResponseData<string>(HttpStatusCode.InternalServerError, ex.Message);
-                return StatusCode((int)response.StatusCode, response);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }

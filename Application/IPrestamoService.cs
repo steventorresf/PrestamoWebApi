@@ -1,9 +1,10 @@
 ﻿using Domain.DTO;
+using Domain.Response;
 
 namespace Application
 {
     public interface IPrestamoService
     {
-        Task<IEnumerable<PrestamoDTO>> GetPrestamosByClienteId(long clienteId);
+        Task<ResponseData<ResponseListItem<PrestamoDTO>>> GetPrestamosByClienteId(long clienteId);
     }
 }

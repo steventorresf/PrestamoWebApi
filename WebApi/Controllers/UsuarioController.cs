@@ -19,26 +19,16 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> ObtenerUsuarioPorLogin([FromBody] LoginRequest request)
+        public async Task<ActionResult<ResponseData<LoginResultDTO>>> ObtenerUsuarioPorLogin([FromBody] LoginRequest request)
         {
             try
             {
-                LoginResultDTO? result = await _service.ObtenerUsuarioPorLogin(request);
-                if(result == null)
-                {
-                    var response = new ResponseData<LoginResultDTO>(HttpStatusCode.OK, "No existe un usuario con esas credenciales");
-                    return StatusCode((int)response.StatusCode, response);
-                }
-                else
-                {
-                    var response = new ResponseData<LoginResultDTO>(result);
-                    return StatusCode((int)response.StatusCode, response);
-                }
+                var response = await _service.ObtenerUsuarioPorLogin(request);
+                return StatusCode((int)response.StatusCode, response.StatusCode == HttpStatusCode.OK ? response : response.Message);
             }
             catch (Exception ex)
             {
-                var response = new ResponseData<LoginResultDTO>(HttpStatusCode.InternalServerError, ex.Message);
-                return StatusCode((int)response.StatusCode, response);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }

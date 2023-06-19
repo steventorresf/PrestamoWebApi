@@ -11,9 +11,9 @@ namespace Persistence.Implementations
         {
             _context = context;
         }
-        public async Task<IEnumerable<Prestamo>> GetPrestamosByClienteId(long clienteId)
+        public async Task<List<Prestamo>> GetPrestamosByClienteId(long clienteId)
         {
-            IEnumerable<Prestamo> lista = await _context.Prestamo
+            List<Prestamo> lista = await _context.Prestamo
                     .Include(p => p.Periodo)
                     .Include(e => e.Estado)
                     .Where(x => x.ClienteId == clienteId)

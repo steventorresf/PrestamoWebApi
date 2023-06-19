@@ -1,10 +1,11 @@
 ﻿using Domain.DTO;
 using Domain.Request;
+using Domain.Response;
 
 namespace Application
 {
     public interface IUsuarioService
     {
-        Task<LoginResultDTO?> ObtenerUsuarioPorLogin(LoginRequest request);
+        Task<ResponseData<LoginResultDTO>> ObtenerUsuarioPorLogin(LoginRequest request);
     }
 }

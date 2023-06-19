@@ -13,12 +13,12 @@ namespace Persistence.Implementations
             _context = context;
         }
 
-        public async Task<ResponseListItem<Cliente>> GetClientes(int UsuarioId, string? textFilter, int pageNumber, int pageSize)
+        public async Task<ResponseListItem<Cliente>> GetClientes(int uid, string? textFilter, int pageNumber, int pageSize)
         {
             IQueryable<Cliente> lista = _context.Cliente
                 .Include(ti => ti.TipoIdentificacion)
                 .Include(ge => ge.Genero)
-                .Where(c => c.UsuarioId == UsuarioId && c.NombreCompleto.Contains(textFilter ?? string.Empty))
+                .Where(c => c.UsuarioId == uid && c.NombreCompleto.Contains(textFilter ?? string.Empty))
                 .OrderBy(c => c.NombreCompleto);
 
             ResponseListItem<Cliente> response = new()
@@ -33,9 +33,8 @@ namespace Persistence.Implementations
             return response;
         }
 
-        public async Task<Cliente> PostCliente(int UsuarioId, Cliente entity)
+        public async Task<Cliente> PostCliente(Cliente entity)
         {
-            entity.UsuarioId = UsuarioId;
             if (entity.ClienteId == 0)
             {
                 var response = await _context.Cliente.AddAsync(entity);

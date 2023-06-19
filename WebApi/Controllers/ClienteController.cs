@@ -1,15 +1,15 @@
 ﻿using Application;
 using Domain.DTO;
 using Domain.Response;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using WebApi.Filters;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [ServiceFilter(typeof(UserValidationFilter))]
     public class ClienteController : ControllerBase
     {
         private readonly IClienteService _clienteService;
@@ -20,36 +20,31 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(string? textFilter, int pageNumber, int pageSize)
+        public async Task<ActionResult<ResponseData<ResponseListItem<ClienteDTO>>>> GetAll(string? textFilter, int pageNumber, int pageSize)
         {
             try
             {
-                var result = await _clienteService.GetClientes(1, textFilter, pageNumber, pageSize);
-
-                var response = new ResponseData<ResponseListItem<ClienteDTO>>(result);
-                return StatusCode((int)response.StatusCode, response);
+                int uid = Convert.ToInt32(HttpContext.Request.Headers["uid"]);
+                var response = await _clienteService.GetClientes(uid, textFilter, pageNumber, pageSize);
+                return StatusCode((int)response.StatusCode, response.StatusCode == HttpStatusCode.OK ? response : response.Message);
             }
             catch(Exception ex)
             {
-                var response = new ResponseData<string>(HttpStatusCode.InternalServerError, ex.Message);
-                return StatusCode((int)response.StatusCode, response);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostCliente([FromBody] ClienteRequestDTO request)
+        public async Task<ActionResult<ResponseData<ClienteRequestDTO>>> PostCliente([FromBody] ClienteRequestDTO request)
         {
             try
             {
-                var result = await _clienteService.PostCliente(1, request);
-
-                var response = new ResponseData<ClienteRequestDTO>(result);
-                return StatusCode((int)response.StatusCode, response);
+                var response = await _clienteService.PostCliente(request);
+                return StatusCode((int)response.StatusCode, response.StatusCode == HttpStatusCode.OK ? response : response.Message);
             }
             catch (Exception ex)
             {
-                var response = new ResponseData<string>(HttpStatusCode.InternalServerError, ex.Message);
-                return StatusCode((int)response.StatusCode, response);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }

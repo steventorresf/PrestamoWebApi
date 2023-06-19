@@ -4,6 +4,6 @@ namespace Persistence
 {
     public interface ITablasDetalleRepository
     {
-        Task<IEnumerable<TablaDetalle>> GetTablaDetalle(long tablaId);
+        Task<List<TablaDetalle>> GetTablaDetalle(long tablaId);
     }
 }

@@ -18,19 +18,16 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{clienteId}")]
-        public async Task<IActionResult> GetAll(long clienteId)
+        public async Task<ActionResult<ResponseData<ResponseListItem<PrestamoDTO>>>> GetAll(long clienteId)
         {
             try
             {
-                var result = await _prestamoService.GetPrestamosByClienteId(clienteId);
-
-                var response = new ResponseData<IEnumerable<PrestamoDTO>>(result);
-                return StatusCode((int)response.StatusCode, response);
+                var response = await _prestamoService.GetPrestamosByClienteId(clienteId);
+                return StatusCode((int)response.StatusCode, response.StatusCode == HttpStatusCode.OK ? response : response.Message);
             }
             catch (Exception ex)
             {
-                var response = new ResponseData<string>(HttpStatusCode.InternalServerError, ex.Message);
-                return StatusCode((int)response.StatusCode, response);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }

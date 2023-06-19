@@ -4,6 +4,6 @@ namespace Persistence
 {
     public interface IPrestamoRepository
     {
-        Task<IEnumerable<Prestamo>> GetPrestamosByClienteId(long clienteId);
+        Task<List<Prestamo>> GetPrestamosByClienteId(long clienteId);
     }
 }

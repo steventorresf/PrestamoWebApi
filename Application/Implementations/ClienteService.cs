@@ -2,6 +2,7 @@
 using Domain.Response;
 using Persistence;
 using Persistence.Entities;
+using System.Net;
 
 namespace Application.Implementations
 {
@@ -14,10 +15,10 @@ namespace Application.Implementations
             _clienteRepository = clienteRepository;
         }
 
-        public async Task<ResponseListItem<ClienteDTO>> GetClientes(int IdUsuario, string? textFilter, int pageNumber, int pageSize)
+        public async Task<ResponseData<ResponseListItem<ClienteDTO>>> GetClientes(int uid, string? textFilter, int pageNumber, int pageSize)
         {
-            var result = await _clienteRepository.GetClientes(IdUsuario, textFilter, pageNumber, pageSize);
-            ResponseListItem<ClienteDTO> response = new()
+            var result = await _clienteRepository.GetClientes(uid, textFilter, pageNumber, pageSize);
+            ResponseListItem<ClienteDTO> list = new()
             {
                 CountItems = result.CountItems,
                 ListItems = result.ListItems.Select(x=>new ClienteDTO()
@@ -33,10 +34,11 @@ namespace Application.Implementations
                     Direccion = x.Direccion
                 })
             };
-            return response;
+            string message = list.CountItems > 0 ? "Los registros han sido obtenidos correctamente." : "No hay registros";
+            return new ResponseData<ResponseListItem<ClienteDTO>>(list, message);
         }
 
-        public async Task<ClienteRequestDTO> PostCliente(int UsuarioId, ClienteRequestDTO request)
+        public async Task<ResponseData<ClienteRequestDTO>> PostCliente(ClienteRequestDTO request)
         {
             Cliente entity = new()
             {
@@ -48,12 +50,12 @@ namespace Application.Implementations
                 TelCel = request.TelCel,
                 Direccion = request.Direccion,
                 EstadoId = request.EstadoId,
-                UsuarioId = UsuarioId
+                UsuarioId = request.UsuarioId
             };
 
-            entity = await _clienteRepository.PostCliente(UsuarioId, entity);
+            entity = await _clienteRepository.PostCliente(entity);
 
-            ClienteRequestDTO response = new()
+            ClienteRequestDTO element = new()
             {
                 ClienteId = entity.ClienteId,
                 TipoId = entity.TipoId,
@@ -65,7 +67,7 @@ namespace Application.Implementations
                 EstadoId = entity.EstadoId,
                 UsuarioId = entity.UsuarioId
             };
-            return response;
+            return new ResponseData<ClienteRequestDTO>(element, "El cliente ha sido creado exitosamente");
         }
     }
 }

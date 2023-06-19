@@ -1,9 +1,10 @@
 ﻿using Domain.DTO;
+using Domain.Response;
 
 namespace Application
 {
     public interface ITablaDetalleService
     {
-        Task<IEnumerable<TablaDetalleItemDTO>> GetTablaDetallePorCodigos(string codigos);
+        Task<ResponseData<List<TablaDetalleItemDTO>>> GetTablaDetallePorCodigos(string codigos);
     }
 }

@@ -32,7 +32,11 @@ namespace Persistence
 
         #region Definicion de Dbset
 
-        public virtual DbSet<Cliente> Cliente { get; set; }
+        public virtual DbSet<Cliente> Cliente
+        {
+            get { return Set<Cliente>(); }
+        }
+
         public virtual DbSet<DiaNoHabil> DiaNoHabil { get; set; }
         public virtual DbSet<Prestamo> Prestamo { get; set; }
         public virtual DbSet<PrestamoDetalle> PrestamoDetalle { get; set; }
