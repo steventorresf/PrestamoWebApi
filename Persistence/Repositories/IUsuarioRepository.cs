@@ -4,6 +4,6 @@ namespace Persistence.Repositories
 {
     public interface IUsuarioRepository
     {
-        Task<Usuario?> ObtenerUsuarioByLogin(string nombreUsuario);
+        Task<Usuario?> ObtenerUsuarioByLogin(string nombreUsuario, string clave);
     }
 }

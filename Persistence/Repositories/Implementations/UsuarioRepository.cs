@@ -12,12 +12,19 @@ namespace Persistence.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<Usuario?> ObtenerUsuarioByLogin(string nombreUsuario)
+        public async Task<Usuario?> ObtenerUsuarioByLogin(string nombreUsuario, string clave)
         {
-            Usuario? entity = await _context.Usuario
+            Usuario? user = await _context.Usuario
                 .FirstOrDefaultAsync(x => x.NombreUsuario.Equals(nombreUsuario));
+            
+            if(user != null)
+            {
+                bool userValid = BCrypt.Net.BCrypt.Verify(clave, user.Clave);
+                if (!userValid)
+                    return null;
+            }
 
-            return entity;
+            return user;
         }
     }
 }

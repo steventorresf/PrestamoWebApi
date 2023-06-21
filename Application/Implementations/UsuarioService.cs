@@ -1,8 +1,10 @@
 ﻿using Domain.DTO;
+using Domain.Exceptions;
 using Domain.Request;
 using Domain.Response;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Persistence.Entities;
 using Persistence.Repositories;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,11 +25,14 @@ namespace Application.Implementations
             _options = options;
         }
 
-        public async Task<ResponseData<LoginResultDTO>> ObtenerUsuarioPorLogin(LoginRequest request)
+        public async Task<LoginResultDTO> ObtenerUsuarioPorLogin(LoginRequest request)
         {
-            Usuario? usuario = await _repository.ObtenerUsuarioByLogin(request.UserName);
+            Usuario? usuario = await _repository.ObtenerUsuarioByLogin(request.UserName, request.Password);
             if (usuario == null)
-                return new ResponseData<LoginResultDTO>(HttpStatusCode.BadRequest, "Los datos del usuario son incorrectos");
+            {
+                List<string> errors = new List<string>() { "El nombre de usuario y/o contraseña son incorrectos." };
+                throw new BadRequestException(JsonConvert.SerializeObject(errors));
+            }
 
             var authClaims = new List<Claim>
             {
@@ -52,7 +57,7 @@ namespace Application.Implementations
 
             var token = new JwtSecurityToken(header, payload);
 
-            return new ResponseData<LoginResultDTO>(new LoginResultDTO
+            return new LoginResultDTO
             {
                 UsuarioId = usuario.UsuarioId,
                 NombreCompleto = usuario.NombreCompleto,
@@ -60,7 +65,7 @@ namespace Application.Implementations
                 Avatar = usuario.Avatar,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 FechaExpiracion = fechaExpiracion
-            }, "Usuario logueado exitosamente");
+            };
         }
     }
 }

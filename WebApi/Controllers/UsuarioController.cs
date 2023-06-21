@@ -21,15 +21,8 @@ namespace WebApi.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<ResponseData<LoginResultDTO>>> ObtenerUsuarioPorLogin([FromBody] LoginRequest request)
         {
-            try
-            {
-                var response = await _service.ObtenerUsuarioPorLogin(request);
-                return StatusCode((int)response.StatusCode, response.StatusCode == HttpStatusCode.OK ? response : response.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
-            }
+            var response = await _service.ObtenerUsuarioPorLogin(request);
+            return new ResponseData<LoginResultDTO>(response, "Usuario logueado");
         }
     }
 }
