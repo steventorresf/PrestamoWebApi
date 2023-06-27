@@ -29,6 +29,7 @@ builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IPrestamoService, PrestamoService>();
 builder.Services.AddScoped<ITablaDetalleService, TablaDetalleService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IFileTxtService, FileTxtService>();
 
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IPrestamoRepository, PrestamoRepository>();
@@ -46,7 +47,12 @@ builder.Services.AddSwaggerGen(c=>
     {
         Title = "PrestamoFacilWebApi",
         Version = "v1",
-        Description = "API para Prestamo Fácil Web"
+        Description = "API para Prestamo Fácil Web",
+        Contact = new OpenApiContact
+        {
+            Name = "Steven Torres Fernández",
+            Email = "steventorresf@gmail.com"
+        }
     });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

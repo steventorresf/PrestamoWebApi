@@ -2,7 +2,6 @@
 using Domain.DTO;
 using Domain.Response;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace WebApi.Controllers
 {
@@ -20,15 +19,8 @@ namespace WebApi.Controllers
         [HttpGet("by-codigos")]
         public async Task<ActionResult<ResponseData<List<TablaDetalleItemDTO>>>> GetByCodigo(string codigos)
         {
-            try
-            {
-                var response = await _tablaDetalleService.GetTablaDetallePorCodigos(codigos);
-                return StatusCode((int)response.StatusCode, response.StatusCode == HttpStatusCode.OK ? response : response.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
-            }
+            var response = await _tablaDetalleService.GetTablaDetallePorCodigos(codigos);
+            return new ResponseData<List<TablaDetalleItemDTO>>(response, "Registros Ok");
         }
     }
 }

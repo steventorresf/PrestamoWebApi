@@ -2,7 +2,6 @@
 using Domain.Response;
 using Persistence;
 using Persistence.Entities;
-using System.Collections.Generic;
 
 namespace Application.Implementations
 {
@@ -15,7 +14,7 @@ namespace Application.Implementations
             _prestamoRepository = prestamoRepository;
         }
 
-        public async Task<ResponseData<ResponseListItem<PrestamoDTO>>> GetPrestamosByClienteId(long clienteId)
+        public async Task<ResponseListItem<PrestamoDTO>> GetPrestamosByClienteId(long clienteId)
         {
             List<Prestamo> lista = await _prestamoRepository.GetPrestamosByClienteId(clienteId);
             ResponseListItem<PrestamoDTO> list = new()
@@ -39,9 +38,7 @@ namespace Application.Implementations
                     ValorTotal = x.ValorPrestamo + ((x.ValorPrestamo * x.Porcentaje / 100) / 30 * x.Dias),
                 })
             };
-
-            string message = list.CountItems > 0 ? "Los registros han sido obtenidos correctamente." : "No hay registros";
-            return new ResponseData<ResponseListItem<PrestamoDTO>>(list, message);
+            return list;
         }
     }
 }

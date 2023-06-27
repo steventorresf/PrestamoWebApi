@@ -15,7 +15,7 @@ namespace Application.Implementations
             _clienteRepository = clienteRepository;
         }
 
-        public async Task<ResponseData<ResponseListItem<ClienteDTO>>> GetClientes(int uid, string? textFilter, int pageNumber, int pageSize)
+        public async Task<ResponseListItem<ClienteDTO>> GetClientes(int uid, string? textFilter, int pageNumber, int pageSize)
         {
             var result = await _clienteRepository.GetClientes(uid, textFilter, pageNumber, pageSize);
             ResponseListItem<ClienteDTO> list = new()
@@ -34,11 +34,10 @@ namespace Application.Implementations
                     Direccion = x.Direccion
                 })
             };
-            string message = list.CountItems > 0 ? "Los registros han sido obtenidos correctamente." : "No hay registros";
-            return new ResponseData<ResponseListItem<ClienteDTO>>(list, message);
+            return list;
         }
 
-        public async Task<ResponseData<ClienteRequestDTO>> PostCliente(ClienteRequestDTO request)
+        public async Task<ClienteRequestDTO> PostCliente(ClienteRequestDTO request)
         {
             Cliente entity = new()
             {
@@ -67,7 +66,7 @@ namespace Application.Implementations
                 EstadoId = entity.EstadoId,
                 UsuarioId = entity.UsuarioId
             };
-            return new ResponseData<ClienteRequestDTO>(element, "El cliente ha sido creado exitosamente");
+            return element;
         }
     }
 }

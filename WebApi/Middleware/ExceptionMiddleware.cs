@@ -1,4 +1,5 @@
-﻿using Domain.Exceptions;
+﻿using Application;
+using Domain.Exceptions;
 using Newtonsoft.Json;
 
 namespace WebApi.Middleware
@@ -12,7 +13,7 @@ namespace WebApi.Middleware
             _requestDelegate = requestDelegate;
         }
 
-        public async Task InvokeAsync(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext httpContext, IFileTxtService fileTxtService)
         {
             try
             {
@@ -39,8 +40,9 @@ namespace WebApi.Middleware
                     Errors = JsonConvert.DeserializeObject<List<string>>(ex.Message)
                 });
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                await fileTxtService.FileLogError(exception);
                 httpContext.Response.ContentType = "application/json";
                 httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await httpContext.Response.WriteAsJsonAsync(new

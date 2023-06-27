@@ -5,6 +5,6 @@ namespace Application
 {
     public interface IPrestamoService
     {
-        Task<ResponseData<ResponseListItem<PrestamoDTO>>> GetPrestamosByClienteId(long clienteId);
+        Task<ResponseListItem<PrestamoDTO>> GetPrestamosByClienteId(long clienteId);
     }
 }

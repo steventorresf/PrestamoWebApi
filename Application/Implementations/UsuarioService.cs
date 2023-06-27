@@ -1,14 +1,12 @@
 ﻿using Domain.DTO;
 using Domain.Exceptions;
 using Domain.Request;
-using Domain.Response;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Persistence.Entities;
 using Persistence.Repositories;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 

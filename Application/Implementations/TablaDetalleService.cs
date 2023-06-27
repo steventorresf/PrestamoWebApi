@@ -1,5 +1,4 @@
 ﻿using Domain.DTO;
-using Domain.Response;
 using Persistence;
 using Persistence.Entities;
 
@@ -14,7 +13,7 @@ namespace Application.Implementations
             _tablaDetalleRepository = tablaDetalleRepository;
         }
 
-        public async Task<ResponseData<List<TablaDetalleItemDTO>>> GetTablaDetallePorCodigos(string codigos)
+        public async Task<List<TablaDetalleItemDTO>> GetTablaDetallePorCodigos(string codigos)
         {
             string[] arrayCodigos = codigos.Split(',', StringSplitOptions.RemoveEmptyEntries);
             List<TablaDetalleItemDTO> listado = new();
@@ -36,7 +35,7 @@ namespace Application.Implementations
                     });
                 }
             }
-            return new ResponseData<List<TablaDetalleItemDTO>>(listado, "Operación realizada correctamente.");
+            return listado;
         }
 
     }

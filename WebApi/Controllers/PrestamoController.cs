@@ -2,7 +2,6 @@
 using Domain.DTO;
 using Domain.Response;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace WebApi.Controllers
 {
@@ -20,15 +19,8 @@ namespace WebApi.Controllers
         [HttpGet("{clienteId}")]
         public async Task<ActionResult<ResponseData<ResponseListItem<PrestamoDTO>>>> GetAll(long clienteId)
         {
-            try
-            {
-                var response = await _prestamoService.GetPrestamosByClienteId(clienteId);
-                return StatusCode((int)response.StatusCode, response.StatusCode == HttpStatusCode.OK ? response : response.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
-            }
+            var response = await _prestamoService.GetPrestamosByClienteId(clienteId);
+            return new ResponseData<ResponseListItem<PrestamoDTO>>(response, "Registros Ok");
         }
     }
 }

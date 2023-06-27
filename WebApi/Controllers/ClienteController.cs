@@ -2,7 +2,6 @@
 using Domain.DTO;
 using Domain.Response;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using WebApi.Filters;
 
 namespace WebApi.Controllers
@@ -22,30 +21,16 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<ResponseData<ResponseListItem<ClienteDTO>>>> GetAll(string? textFilter, int pageNumber, int pageSize)
         {
-            try
-            {
-                int uid = Convert.ToInt32(HttpContext.Request.Headers["uid"]);
-                var response = await _clienteService.GetClientes(uid, textFilter, pageNumber, pageSize);
-                return StatusCode((int)response.StatusCode, response.StatusCode == HttpStatusCode.OK ? response : response.Message);
-            }
-            catch(Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
-            }
+            int uid = Convert.ToInt32(HttpContext.Request.Headers["uid"]);
+            var response = await _clienteService.GetClientes(uid, textFilter, pageNumber, pageSize);
+            return new ResponseData<ResponseListItem<ClienteDTO>>(response, "Registros Ok.");
         }
 
         [HttpPost]
         public async Task<ActionResult<ResponseData<ClienteRequestDTO>>> PostCliente([FromBody] ClienteRequestDTO request)
         {
-            try
-            {
-                var response = await _clienteService.PostCliente(request);
-                return StatusCode((int)response.StatusCode, response.StatusCode == HttpStatusCode.OK ? response : response.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
-            }
+            var response = await _clienteService.PostCliente(request);
+            return new ResponseData<ClienteRequestDTO>(response, "El cliente ha sido creado exitosamente.");
         }
     }
 }
