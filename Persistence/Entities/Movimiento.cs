@@ -12,8 +12,6 @@
         public decimal Intereses { get; set; }
         public long DescripcionId { get; set; }
 
-        public Usuario? Usuario { get; set; }
-        public Cliente? Cliente { get; set; }
         public Prestamo? Prestamo { get; set; }
         public PrestamoDetalle? PrestamoDetalle { get; set; }
         public TablaDetalle? Descripcion { get; set; }

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Persistence.Entities;
+﻿using Entities;
 
 namespace Persistence.Repositories.Implementations
 {
@@ -14,8 +13,7 @@ namespace Persistence.Repositories.Implementations
 
         public async Task<Usuario?> ObtenerUsuarioByLogin(string nombreUsuario, string clave)
         {
-            Usuario? user = await _context.Usuario
-                .FirstOrDefaultAsync(x => x.NombreUsuario.Equals(nombreUsuario));
+            Usuario? user = new Usuario();
             
             if(user != null)
             {

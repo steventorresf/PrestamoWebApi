@@ -1,8 +1,8 @@
 ﻿using Domain.DTO;
 using Domain.Response;
-using Persistence;
-using Persistence.Entities;
-using System.Net;
+using Entities;
+using MongoDB.Bson;
+using Persistence.Repositories;
 
 namespace Application.Implementations
 {
@@ -15,7 +15,7 @@ namespace Application.Implementations
             _clienteRepository = clienteRepository;
         }
 
-        public async Task<ResponseListItem<ClienteDTO>> GetClientes(int uid, string? textFilter, int pageNumber, int pageSize)
+        public async Task<ResponseListItem<ClienteDTO>> GetClientes(string uid, string? textFilter, int pageNumber, int pageSize)
         {
             var result = await _clienteRepository.GetClientes(uid, textFilter, pageNumber, pageSize);
             ResponseListItem<ClienteDTO> list = new()
@@ -23,13 +23,12 @@ namespace Application.Implementations
                 CountItems = result.CountItems,
                 ListItems = result.ListItems.Select(x=>new ClienteDTO()
                 {
-                    ClienteId = x.ClienteId,
+                    ClienteId = x.Id,
                     TipoId = x.TipoId,
-                    TipoIdentificacion = x.TipoIdentificacion?.Codigo ?? string.Empty,
+                    TipoIdentificacion = string.Empty,
                     Identificacion = x.Identificacion,
                     NombreCompleto = x.NombreCompleto,
-                    GeneroId = x.GeneroId,
-                    Genero = x.Genero?.Descripcion ?? string.Empty,
+                    Genero = x.GeneroId,
                     TelCel = x.TelCel,
                     Direccion = x.Direccion
                 })
@@ -37,11 +36,10 @@ namespace Application.Implementations
             return list;
         }
 
-        public async Task<ClienteRequestDTO> PostCliente(ClienteRequestDTO request)
+        public async Task PostCliente(ClienteRequestDTO request)
         {
             Cliente entity = new()
             {
-                ClienteId = request.ClienteId,
                 TipoId = request.TipoId,
                 Identificacion = request.Identificacion,
                 NombreCompleto = request.NombreCompleto,
@@ -52,21 +50,7 @@ namespace Application.Implementations
                 UsuarioId = request.UsuarioId
             };
 
-            entity = await _clienteRepository.PostCliente(entity);
-
-            ClienteRequestDTO element = new()
-            {
-                ClienteId = entity.ClienteId,
-                TipoId = entity.TipoId,
-                Identificacion = entity.Identificacion,
-                NombreCompleto = entity.NombreCompleto,
-                GeneroId = entity.GeneroId,
-                TelCel = entity.TelCel,
-                Direccion = entity.Direccion,
-                EstadoId = entity.EstadoId,
-                UsuarioId = entity.UsuarioId
-            };
-            return element;
+            await _clienteRepository.PostCliente(entity);
         }
     }
 }

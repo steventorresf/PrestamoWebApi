@@ -3,6 +3,7 @@ using Application.Implementations;
 using Domain.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Persistence;
@@ -20,6 +21,10 @@ string _corsConfiguration = "_corsConfiguration";
 
 // Add services to the container.
 builder.Services.AddCors();
+
+MongoSettings mongoSettings = new();
+builder.Configuration.GetSection("MongoConnection").Bind(mongoSettings);
+builder.Services.AddSingleton(mongoSettings);
 builder.Services.AddDbContext<BaseContext>(options =>
 {
     options.UseSqlServer(builder.Configuration["ConnectionStrings:PrestamistaDbContext"]);
@@ -36,6 +41,7 @@ builder.Services.AddScoped<IPrestamoRepository, PrestamoRepository>();
 builder.Services.AddScoped<ITablasDetalleRepository, TablasDetalleRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
+builder.Services.AddScoped<MongoDBContext>();
 builder.Services.AddScoped<UserValidationFilter>();
 
 builder.Services.AddControllers();

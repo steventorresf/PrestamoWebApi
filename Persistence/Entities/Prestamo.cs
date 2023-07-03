@@ -14,7 +14,6 @@
         public long EstadoId { get; set; }
         public DateTime? FechaAnulado { get; set; }
 
-        public Cliente? Cliente { get; set; }
         public TablaDetalle? Periodo { get; set; }
         public TablaDetalle? Estado { get; set; }
     }
