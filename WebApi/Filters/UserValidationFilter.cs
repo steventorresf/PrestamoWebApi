@@ -27,7 +27,7 @@ namespace WebApi.Filters
 
             string sUid = context.HttpContext.Request.Headers["uid"];
             int.TryParse(sUid, out int iUid);
-            if (string.IsNullOrEmpty(sUid) || iUid <= 0)
+            if (string.IsNullOrEmpty(sUid))
                 throw new UnauthorizedException("El usuario es invalido, por favor inicie sesión.");
 
             string tokenUid = jwtSecurityToken.Claims.FirstOrDefault(x => x.Type.Contains("/sid"))?.Value ?? "";

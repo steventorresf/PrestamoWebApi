@@ -22,6 +22,11 @@ namespace Persistence
             get { return _database.GetCollection<Cliente>(_mongoCollections.Cliente); }
         }
 
+        public IMongoCollection<Tabla> TablaCollection
+        {
+            get { return _database.GetCollection<Tabla>(_mongoCollections.Tabla); }
+        }
+
         public IMongoCollection<Usuario> UsuarioCollection
         {
             get { return _database.GetCollection<Usuario>(_mongoCollections.Usuario); }

@@ -32,13 +32,13 @@ builder.Services.AddDbContext<BaseContext>(options =>
 
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IPrestamoService, PrestamoService>();
-builder.Services.AddScoped<ITablaDetalleService, TablaDetalleService>();
+builder.Services.AddScoped<ITablaService, TablaService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IFileTxtService, FileTxtService>();
 
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IPrestamoRepository, PrestamoRepository>();
-builder.Services.AddScoped<ITablasDetalleRepository, TablasDetalleRepository>();
+builder.Services.AddScoped<ITablaRepository, TablaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 builder.Services.AddScoped<MongoDBContext>();

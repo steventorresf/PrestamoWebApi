@@ -2,7 +2,6 @@
 using Entities;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 using System.Text.RegularExpressions;
 
 namespace Persistence.Repositories.Implementations
