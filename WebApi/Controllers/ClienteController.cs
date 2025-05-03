@@ -1,36 +1,48 @@
 ﻿using Application;
+using Application.Clientes.ObtenerClientes;
 using Domain.DTO;
 using Domain.Response;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using WebApi.Filters;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [ServiceFilter(typeof(UserValidationFilter))]
+    //[ServiceFilter(typeof(UserValidationFilter))]
     public class ClienteController : ControllerBase
     {
-        private readonly IClienteService _clienteService;
+        private readonly IMediator _mediator;
 
-        public ClienteController(IClienteService clienteService)
+        public ClienteController(IMediator mediator)
         {
-            _clienteService = clienteService;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<ActionResult<ResponseData<ResponseListItem<ClienteDTO>>>> GetAll(string? textFilter, int pageNumber, int pageSize)
+        public async Task<ActionResult<ResponseData<List<ObtenerClientesResponse>>>> ObtenerTodos(string? textoFiltro)
         {
-            int uid = Convert.ToInt32(HttpContext.Request.Headers["uid"]);
-            var response = await _clienteService.GetClientes(uid, textFilter, pageNumber, pageSize);
-            return new ResponseData<ResponseListItem<ClienteDTO>>(response, "Registros Ok.");
+            ObtenerClientesRequest request = new()
+            {
+                UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]),
+                TextoFiltro = textoFiltro,
+            };
+
+            ResponseData<List<ObtenerClientesResponse>> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "Registros Ok."
+            };
+            return Response;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<ResponseData<ClienteRequestDTO>>> PostCliente([FromBody] ClienteRequestDTO request)
-        {
-            var response = await _clienteService.PostCliente(request);
-            return new ResponseData<ClienteRequestDTO>(response, "El cliente ha sido creado exitosamente.");
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<ResponseData<ClienteRequestDTO>>> PostCliente([FromBody] ClienteRequestDTO request)
+        //{
+        //    var response = await _clienteService.PostCliente(request);
+        //    return new ResponseData<ClienteRequestDTO>(response, "El cliente ha sido creado exitosamente.");
+        //}
     }
 }

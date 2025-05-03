@@ -1,6 +1,8 @@
 using Application;
+using Application.Clientes.ObtenerClientes;
 using Application.Implementations;
 using Domain.DTO;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -9,6 +11,7 @@ using Persistence;
 using Persistence.Implementations;
 using Persistence.Repositories;
 using Persistence.Repositories.Implementations;
+using System.Reflection;
 using System.Text;
 using WebApi.Filters;
 using WebApi.Middleware;
@@ -24,6 +27,9 @@ builder.Services.AddDbContext<BaseContext>(options =>
 {
     options.UseSqlServer(builder.Configuration["ConnectionStrings:PrestamistaDbContext"]);
 });
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddTransient<IRequestHandler<ObtenerClientesRequest, List<ObtenerClientesResponse>>, ObtenerClientesHandler>();
 
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IPrestamoService, PrestamoService>();
