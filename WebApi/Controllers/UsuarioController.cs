@@ -1,9 +1,7 @@
-﻿using Application;
-using Domain.DTO;
-using Domain.Request;
+﻿using Application.Usuarios.ObtenerUsuarioPorLogin;
 using Domain.Response;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace WebApi.Controllers
 {
@@ -11,18 +9,22 @@ namespace WebApi.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        private readonly IUsuarioService _service;
+        private readonly IMediator _mediator;
 
-        public UsuarioController(IUsuarioService service)
+        public UsuarioController(IMediator mediator)
         {
-            _service = service;
+            _mediator = mediator;
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<ResponseData<LoginResultDTO>>> ObtenerUsuarioPorLogin([FromBody] LoginRequest request)
+        public async Task<ActionResult<ResponseData<ObtenerUsuarioPorLoginResponse>>> ObtenerUsuarioPorLogin([FromBody] ObtenerUsuarioPorLoginRequest request)
         {
-            var response = await _service.ObtenerUsuarioPorLogin(request);
-            return new ResponseData<LoginResultDTO>(response, "Usuario logueado");
+            ResponseData<ObtenerUsuarioPorLoginResponse> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "Usuario logueado"
+            };
+            return Response;
         }
     }
 }

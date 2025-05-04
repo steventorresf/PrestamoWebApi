@@ -1,6 +1,8 @@
 using Application;
+using Application.Clientes.GuardarCliente;
 using Application.Clientes.ObtenerClientes;
 using Application.Implementations;
+using Application.Usuarios.ObtenerUsuarioPorLogin;
 using Domain.DTO;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,6 +32,8 @@ builder.Services.AddDbContext<BaseContext>(options =>
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddTransient<IRequestHandler<ObtenerClientesRequest, List<ObtenerClientesResponse>>, ObtenerClientesHandler>();
+builder.Services.AddTransient<IRequestHandler<GuardarClienteRequest, GuardarClienteResponse>, GuardarClienteHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerUsuarioPorLoginRequest, ObtenerUsuarioPorLoginResponse>, ObtenerUsuarioPorLoginHandler>();
 
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IPrestamoService, PrestamoService>();

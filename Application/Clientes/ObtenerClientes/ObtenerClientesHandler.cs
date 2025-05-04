@@ -36,7 +36,9 @@ public class ObtenerClientesHandler : IRequestHandler<ObtenerClientesRequest, Li
                 Genero = x.Genero.Descripcion,
                 TelCel = x.TelCel,
                 Direccion = x.Direccion
-            }).ToListAsync();
+            })
+            .ToListAsync()
+            .ConfigureAwait(false);
 
         return Resultado;
     }

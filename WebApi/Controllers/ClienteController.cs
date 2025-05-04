@@ -1,10 +1,8 @@
-﻿using Application;
+﻿using Application.Clientes.GuardarCliente;
 using Application.Clientes.ObtenerClientes;
-using Domain.DTO;
 using Domain.Response;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using WebApi.Filters;
 
 namespace WebApi.Controllers
@@ -38,11 +36,16 @@ namespace WebApi.Controllers
             return Response;
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<ResponseData<ClienteRequestDTO>>> PostCliente([FromBody] ClienteRequestDTO request)
-        //{
-        //    var response = await _clienteService.PostCliente(request);
-        //    return new ResponseData<ClienteRequestDTO>(response, "El cliente ha sido creado exitosamente.");
-        //}
+        [HttpPost]
+        public async Task<ActionResult<ResponseData<GuardarClienteResponse>>> GuardarCliente([FromBody] GuardarClienteRequest request)
+        {
+            request.UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]);
+            ResponseData<GuardarClienteResponse> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "El cliente ha sido guardado exitosamente."
+            };
+            return Response;
+        }
     }
 }
