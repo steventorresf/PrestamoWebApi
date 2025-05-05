@@ -2,6 +2,8 @@ using Application;
 using Application.Clientes.GuardarCliente;
 using Application.Clientes.ObtenerClientes;
 using Application.Implementations;
+using Application.Prestamos.ObtenerPrestamosPorClienteId;
+using Application.TablaDetalles.ObtenerTablaDetallesPorCodigos;
 using Application.Usuarios.ObtenerUsuarioPorLogin;
 using Domain.DTO;
 using MediatR;
@@ -10,9 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Persistence;
-using Persistence.Implementations;
-using Persistence.Repositories;
-using Persistence.Repositories.Implementations;
 using System.Reflection;
 using System.Text;
 using WebApi.Filters;
@@ -34,17 +33,10 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Get
 builder.Services.AddTransient<IRequestHandler<ObtenerClientesRequest, List<ObtenerClientesResponse>>, ObtenerClientesHandler>();
 builder.Services.AddTransient<IRequestHandler<GuardarClienteRequest, GuardarClienteResponse>, GuardarClienteHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerUsuarioPorLoginRequest, ObtenerUsuarioPorLoginResponse>, ObtenerUsuarioPorLoginHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosPorClienteIdRequest, List<ObtenerPrestamosPorClienteIdResponse>>, ObtenerPrestamosPorClienteIdHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerTablaDetallesPorCodigosRequest, List<ObtenerTablaDetallesPorCodigosResponse>>, ObtenerTablaDetallesPorCodigosHandler>();
 
-builder.Services.AddScoped<IClienteService, ClienteService>();
-builder.Services.AddScoped<IPrestamoService, PrestamoService>();
-builder.Services.AddScoped<ITablaDetalleService, TablaDetalleService>();
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IFileTxtService, FileTxtService>();
-
-builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-builder.Services.AddScoped<IPrestamoRepository, PrestamoRepository>();
-builder.Services.AddScoped<ITablasDetalleRepository, TablasDetalleRepository>();
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 builder.Services.AddScoped<UserValidationFilter>();
 

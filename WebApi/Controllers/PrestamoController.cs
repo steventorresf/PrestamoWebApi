@@ -1,6 +1,6 @@
-﻿using Application;
-using Domain.DTO;
+﻿using Application.Prestamos.ObtenerPrestamosPorClienteId;
 using Domain.Response;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -9,18 +9,29 @@ namespace WebApi.Controllers
     [ApiController]
     public class PrestamoController : ControllerBase
     {
-        private readonly IPrestamoService _prestamoService;
+        private readonly IMediator _mediator;
 
-        public PrestamoController(IPrestamoService prestamoService)
+        public PrestamoController(IMediator mediator)
         {
-            _prestamoService = prestamoService;
+            _mediator = mediator;
         }
 
         [HttpGet("{clienteId}")]
-        public async Task<ActionResult<ResponseData<ResponseListItem<PrestamoDTO>>>> GetAll(long clienteId)
+        public async Task<ActionResult<ResponseData<List<ObtenerPrestamosPorClienteIdResponse>>>> ObtenerPrestamosPorClienteId(long clienteId)
         {
-            var response = await _prestamoService.GetPrestamosByClienteId(clienteId);
-            return new ResponseData<ResponseListItem<PrestamoDTO>>(response, "Registros Ok");
+            ObtenerPrestamosPorClienteIdRequest request = new()
+            {
+                ClienteId = clienteId,
+                UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"])
+            };
+
+            ResponseData<List<ObtenerPrestamosPorClienteIdResponse>> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "Registros Ok"
+            };
+
+            return Response;
         }
     }
 }

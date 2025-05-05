@@ -1,6 +1,6 @@
-﻿using Application;
-using Domain.DTO;
+﻿using Application.TablaDetalles.ObtenerTablaDetallesPorCodigos;
 using Domain.Response;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -9,18 +9,24 @@ namespace WebApi.Controllers
     [ApiController]
     public class TablaDetalleController : ControllerBase
     {
-        private readonly ITablaDetalleService _tablaDetalleService;
+        private readonly IMediator _mediator;
 
-        public TablaDetalleController(ITablaDetalleService tablaDetalleService)
+        public TablaDetalleController(IMediator mediator)
         {
-            _tablaDetalleService = tablaDetalleService;
+            _mediator = mediator;
         }
 
         [HttpGet("by-codigos")]
-        public async Task<ActionResult<ResponseData<List<TablaDetalleItemDTO>>>> GetByCodigo(string codigos)
+        public async Task<ActionResult<ResponseData<List<ObtenerTablaDetallesPorCodigosResponse>>>> ObtenerTablaDetallesPorCodigos(string codigos)
         {
-            var response = await _tablaDetalleService.GetTablaDetallePorCodigos(codigos);
-            return new ResponseData<List<TablaDetalleItemDTO>>(response, "Registros Ok");
+            ObtenerTablaDetallesPorCodigosRequest request = new() { Codigos = codigos };
+
+            ResponseData<List<ObtenerTablaDetallesPorCodigosResponse>> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "Registros Ok."
+            };
+            return Response;
         }
     }
 }
