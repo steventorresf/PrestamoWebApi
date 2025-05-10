@@ -7,7 +7,7 @@ using WebApi.Filters;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/cliente")]
     [ApiController]
     //[ServiceFilter(typeof(UserValidationFilter))]
     public class ClienteController : ControllerBase
@@ -19,7 +19,7 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet("obtener-por-usuario-id")]
         public async Task<ActionResult<ResponseData<List<ObtenerClientesResponse>>>> ObtenerTodos(string? textoFiltro)
         {
             ObtenerClientesRequest request = new()
@@ -36,7 +36,7 @@ namespace WebApi.Controllers
             return Response;
         }
 
-        [HttpPost]
+        [HttpPost("guardar-cliente")]
         public async Task<ActionResult<ResponseData<GuardarClienteResponse>>> GuardarCliente([FromBody] GuardarClienteRequest request)
         {
             request.UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]);

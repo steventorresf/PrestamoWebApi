@@ -1,6 +1,6 @@
-﻿using Application;
-using Domain.Exceptions;
+﻿using Domain.Exceptions;
 using Newtonsoft.Json;
+using Persistence.Files;
 
 namespace WebApi.Middleware
 {
@@ -13,7 +13,7 @@ namespace WebApi.Middleware
             _requestDelegate = requestDelegate;
         }
 
-        public async Task InvokeAsync(HttpContext httpContext, IFileTxtService fileTxtService)
+        public async Task InvokeAsync(HttpContext httpContext, ILogErrorFile fileTxtService)
         {
             try
             {

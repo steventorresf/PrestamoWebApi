@@ -1,7 +1,9 @@
-using Application;
 using Application.Clientes.GuardarCliente;
 using Application.Clientes.ObtenerClientes;
-using Application.Implementations;
+using Application.Prestamos.CrearPrestamo;
+using Application.Prestamos.ObtenerPrestamoDetalle;
+using Application.Prestamos.ObtenerPrestamosCongelados;
+using Application.Prestamos.ObtenerPrestamosPendientes;
 using Application.Prestamos.ObtenerPrestamosPorClienteId;
 using Application.TablaDetalles.ObtenerTablaDetallesPorCodigos;
 using Application.Usuarios.ObtenerUsuarioPorLogin;
@@ -12,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Persistence;
+using Persistence.Files;
 using System.Reflection;
 using System.Text;
 using WebApi.Filters;
@@ -35,8 +38,12 @@ builder.Services.AddTransient<IRequestHandler<GuardarClienteRequest, GuardarClie
 builder.Services.AddTransient<IRequestHandler<ObtenerUsuarioPorLoginRequest, ObtenerUsuarioPorLoginResponse>, ObtenerUsuarioPorLoginHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosPorClienteIdRequest, List<ObtenerPrestamosPorClienteIdResponse>>, ObtenerPrestamosPorClienteIdHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerTablaDetallesPorCodigosRequest, List<ObtenerTablaDetallesPorCodigosResponse>>, ObtenerTablaDetallesPorCodigosHandler>();
+builder.Services.AddTransient<IRequestHandler<CrearPrestamoRequest, bool>, CrearPrestamoHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerPrestamoDetalleRequest, List<ObtenerPrestamoDetalleResponse>>, ObtenerPrestamoDetalleHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosPendientesRequest, List<ObtenerPrestamosPendientesResponse>>, ObtenerPrestamosPendientesHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosCongeladosRequest, List<ObtenerPrestamosCongeladosResponse>>, ObtenerPrestamosCongeladosHandler>();
 
-builder.Services.AddScoped<IFileTxtService, FileTxtService>();
+builder.Services.AddScoped<ILogErrorFile, LogErrorFile>();
 
 builder.Services.AddScoped<UserValidationFilter>();
 

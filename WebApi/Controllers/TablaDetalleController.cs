@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/tabla-detalle")]
     [ApiController]
     public class TablaDetalleController : ControllerBase
     {
@@ -16,7 +16,7 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("by-codigos")]
+        [HttpGet("obtener-por-codigos")]
         public async Task<ActionResult<ResponseData<List<ObtenerTablaDetallesPorCodigosResponse>>>> ObtenerTablaDetallesPorCodigos(string codigos)
         {
             ObtenerTablaDetallesPorCodigosRequest request = new() { Codigos = codigos };

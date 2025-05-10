@@ -18,6 +18,8 @@
         public Cliente Cliente { get; set; }
         public TablaDetalle Periodo { get; set; }
         public TablaDetalle Estado { get; set; }
+        public List<PrestamoDetalle> PrestamoDetalles { get; set; } = new();
+        public List<Movimiento> Movimientos { get; set; } = new();
 #pragma warning restore CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de declararlo como que admite un valor NULL.
     }
 }

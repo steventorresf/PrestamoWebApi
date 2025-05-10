@@ -28,6 +28,33 @@ namespace Persistence
                 .WithMany(b => b.Estados)
                 .HasForeignKey(p => p.EstadoId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PrestamoDetalle>()
+                .HasOne(p => p.Prestamo)
+                .WithMany(b => b.PrestamoDetalles)
+                .HasForeignKey(p => p.PrestamoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Movimiento>()
+                .HasOne(p => p.Usuario)
+                .WithMany(b => b.Movimientos)
+                .HasForeignKey(p => p.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Movimiento>()
+                .HasOne(p => p.Cliente)
+                .WithMany(b => b.Movimientos)
+                .HasForeignKey(p => p.ClienteId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Movimiento>()
+                .HasOne(p => p.Prestamo)
+                .WithMany(b => b.Movimientos)
+                .HasForeignKey(p => p.PrestamoId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Movimiento>()
+                .HasOne(p => p.PrestamoDetalle)
+                .WithMany(b => b.Movimientos)
+                .HasForeignKey(p => p.PrestamoDetalleId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         #region Definicion de Dbset

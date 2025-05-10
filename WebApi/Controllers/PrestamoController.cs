@@ -1,11 +1,15 @@
-﻿using Application.Prestamos.ObtenerPrestamosPorClienteId;
+﻿using Application.Prestamos.CrearPrestamo;
+using Application.Prestamos.ObtenerPrestamoDetalle;
+using Application.Prestamos.ObtenerPrestamosCongelados;
+using Application.Prestamos.ObtenerPrestamosPendientes;
+using Application.Prestamos.ObtenerPrestamosPorClienteId;
 using Domain.Response;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/prestamo")]
     [ApiController]
     public class PrestamoController : ControllerBase
     {
@@ -16,7 +20,18 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{clienteId}")]
+        [HttpPost("crear-prestamo")]
+        public async Task<ActionResult<ResponseData<bool>>> CrearPrestamo([FromBody] CrearPrestamoRequest request)
+        {
+            ResponseData<bool> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "El prestamo ha sido creado correctamente."
+            };
+            return Response;
+        }
+
+        [HttpGet("obtener-prestamos-por-cliente-id/{clienteId}")]
         public async Task<ActionResult<ResponseData<List<ObtenerPrestamosPorClienteIdResponse>>>> ObtenerPrestamosPorClienteId(long clienteId)
         {
             ObtenerPrestamosPorClienteIdRequest request = new()
@@ -30,7 +45,45 @@ namespace WebApi.Controllers
                 Data = await _mediator.Send(request),
                 Message = "Registros Ok"
             };
+            return Response;
+        }
 
+        [HttpGet("obtener-prestamo-por-id/{prestamoId}")]
+        public async Task<ActionResult<ResponseData<List<ObtenerPrestamoDetalleResponse>>>> ObtenerPrestamoDetalle(long prestamoId)
+        {
+            ObtenerPrestamoDetalleRequest request = new() { PrestamoId = prestamoId };
+
+            ResponseData<List<ObtenerPrestamoDetalleResponse>> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "Registros Ok"
+            };
+            return Response;
+        }
+
+        [HttpGet("obtener-prestamos-pendiente-por-usuario-id/{usuarioId}")]
+        public async Task<ActionResult<ResponseData<List<ObtenerPrestamosPendientesResponse>>>> ObtenerPrestamosPendientes(int usuarioId)
+        {
+            ObtenerPrestamosPendientesRequest request = new() { UsuarioId = usuarioId };
+
+            ResponseData<List<ObtenerPrestamosPendientesResponse>> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "Registros Ok"
+            };
+            return Response;
+        }
+
+        [HttpGet("obtener-prestamos-congelados-por-usuario-id/{usuarioId}")]
+        public async Task<ActionResult<ResponseData<List<ObtenerPrestamosCongeladosResponse>>>> ObtenerPrestamosCongelados(int usuarioId)
+        {
+            ObtenerPrestamosCongeladosRequest request = new() { UsuarioId = usuarioId };
+
+            ResponseData<List<ObtenerPrestamosCongeladosResponse>> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "Registros Ok"
+            };
             return Response;
         }
     }
