@@ -1,5 +1,7 @@
 ﻿using Application.Prestamos.CrearPrestamo;
+using Application.Prestamos.ObtenerCalculoCuotas;
 using Application.Prestamos.ObtenerPrestamoDetalle;
+using Application.Prestamos.ObtenerPrestamosAnulados;
 using Application.Prestamos.ObtenerPrestamosCongelados;
 using Application.Prestamos.ObtenerPrestamosPendientes;
 using Application.Prestamos.ObtenerPrestamosPorClienteId;
@@ -80,6 +82,30 @@ namespace WebApi.Controllers
             ObtenerPrestamosCongeladosRequest request = new() { UsuarioId = usuarioId };
 
             ResponseData<List<ObtenerPrestamosCongeladosResponse>> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "Registros Ok"
+            };
+            return Response;
+        }
+
+        [HttpGet("obtener-prestamos-anulados-por-usuario-id/{usuarioId}")]
+        public async Task<ActionResult<ResponseData<List<ObtenerPrestamosAnuladosResponse>>>> ObtenerPrestamosAnulados(int usuarioId)
+        {
+            ObtenerPrestamosAnuladosRequest request = new() { UsuarioId = usuarioId };
+
+            ResponseData<List<ObtenerPrestamosAnuladosResponse>> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "Registros Ok"
+            };
+            return Response;
+        }
+
+        [HttpPost("calcular-cuotas-prestamo")]
+        public async Task<ActionResult<ResponseData<List<ObtenerCalculoCuotasResponse>>>> ObtenerCalculoCuotas(ObtenerCalculoCuotasRequest request)
+        {
+            ResponseData<List<ObtenerCalculoCuotasResponse>> Response = new()
             {
                 Data = await _mediator.Send(request),
                 Message = "Registros Ok"

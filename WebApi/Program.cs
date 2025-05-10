@@ -1,7 +1,9 @@
 using Application.Clientes.GuardarCliente;
 using Application.Clientes.ObtenerClientes;
 using Application.Prestamos.CrearPrestamo;
+using Application.Prestamos.ObtenerCalculoCuotas;
 using Application.Prestamos.ObtenerPrestamoDetalle;
+using Application.Prestamos.ObtenerPrestamosAnulados;
 using Application.Prestamos.ObtenerPrestamosCongelados;
 using Application.Prestamos.ObtenerPrestamosPendientes;
 using Application.Prestamos.ObtenerPrestamosPorClienteId;
@@ -42,6 +44,8 @@ builder.Services.AddTransient<IRequestHandler<CrearPrestamoRequest, bool>, Crear
 builder.Services.AddTransient<IRequestHandler<ObtenerPrestamoDetalleRequest, List<ObtenerPrestamoDetalleResponse>>, ObtenerPrestamoDetalleHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosPendientesRequest, List<ObtenerPrestamosPendientesResponse>>, ObtenerPrestamosPendientesHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosCongeladosRequest, List<ObtenerPrestamosCongeladosResponse>>, ObtenerPrestamosCongeladosHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosAnuladosRequest, List<ObtenerPrestamosAnuladosResponse>>, ObtenerPrestamosAnuladosHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerCalculoCuotasRequest, List<ObtenerCalculoCuotasResponse>>, ObtenerCalculoCuotasHandler>();
 
 builder.Services.AddScoped<ILogErrorFile, LogErrorFile>();
 
