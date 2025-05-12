@@ -2,19 +2,24 @@
 
 public class Constants
 {
+    public const long TablaId_EstadosClientes = 1;
+    public const string CodigoEstado_Cliente_Activo = "AC";
+    public const string CodigoEstado_Cliente_Inactivo = "IN";
+    public const string CodigoEstado_Cliente_Eliminado = "XX";
+
     public const long TablaId_EstadosPrestamos = 2;
+    public const string CodigoEstado_Prestamo_Finalizado = "FI";
+    public const string CodigoEstado_Prestamo_Pendiente = "PE";
+    public const string CodigoEstado_Prestamo_Congelado = "CO";
+    public const string CodigoEstado_Prestamo_Anulado = "AN";
+
+    public const long TablaId_PeriodosPrestamos = 3;
+    public const string CodigoPeriodo_PorAbonos = "P";
+    public const string CodigoPeriodo_Quincenal = "Q";
+    public const string CodigoPeriodo_Semanal = "S";
+    public const string CodigoPeriodo_Mensual = "M";
+
     public const long TablaId_DescripcionesMovimientos = 2;
-    public const long TablaId_PeriodosPrestamos = 2;
-
-    public const string CodigoEstado_Prestamo_Finalizado = "";
-    public const string CodigoEstado_Prestamo_Pendiente = "";
-    public const string CodigoEstado_Prestamo_Anulado = "";
-
-    public const string CodigoPeriodo_PorAbonos = "";
-    public const string CodigoPeriodo_Quincenal = "";
-    public const string CodigoPeriodo_Semanal = "";
-    public const string CodigoPeriodo_Mensual = "";
-
     public const string CodigoDescripcion_Movimiento_FinPrestamo = "FP";
 
     // Meses 31

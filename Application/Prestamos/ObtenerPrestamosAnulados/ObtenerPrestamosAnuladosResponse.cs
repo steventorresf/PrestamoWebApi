@@ -8,5 +8,4 @@ public class ObtenerPrestamosAnuladosResponse
     public DateTime FechaPrestamo { get; set; }
     public decimal ValorTotal { get; set; }
     public DateTime? FechaAnulado { get; set; }
-    public long EstadoId {  get; set; }
 }

@@ -6,7 +6,7 @@ public class ObtenerCalculoCuotasRequest : IRequest<List<ObtenerCalculoCuotasRes
 {
     public int UsuarioId { get; set; }
     public string FechaInicio { get; set; } = string.Empty;
-    public long PeriodoId {  get; set; }
+    public string PeriodoCod { get; set; } = string.Empty;
     public int NoCuotas { get; set; }
     public decimal ValorPrestamo { get; set; }
     public decimal ValorTotal { get; set; }

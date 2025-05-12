@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Entities;
+using Persistence.Utilities;
 
 namespace Application.Prestamos.ObtenerPrestamosCongelados;
 
@@ -17,8 +18,10 @@ public class ObtenerPrestamosCongeladosHandler : IRequestHandler<ObtenerPrestamo
     public async Task<List<ObtenerPrestamosCongeladosResponse>> Handle(ObtenerPrestamosCongeladosRequest request, CancellationToken cancellationToken)
     {
         IQueryable<Prestamo> prestamos = _context.Prestamo
-                    .Include(e => e.Cliente)
-                    .Where(x => x.Cliente.UsuarioId == request.UsuarioId);
+                    .Include(x => x.Cliente)
+                    .Include(x => x.Estado)
+                    .Where(x => x.Cliente.UsuarioId == request.UsuarioId &&
+                                x.Estado.Codigo.Equals(Constants.CodigoEstado_Prestamo_Congelado));
 
         List<ObtenerPrestamosCongeladosResponse> Resultado =
             await prestamos.Select(x => new ObtenerPrestamosCongeladosResponse

@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Entities;
+using Persistence.Interfaces;
 using Persistence.Utilities;
 
 namespace Application.Prestamos.ModificarEstadoPrestamo;
@@ -10,17 +11,17 @@ namespace Application.Prestamos.ModificarEstadoPrestamo;
 public class ModificarEstadoPrestamoHandler : IRequestHandler<ModificarEstadoPrestamoRequest, bool>
 {
     private readonly BaseContext _context;
+    private readonly ITablaDetalleRepository _tablaDetalleRepository;
 
-    public ModificarEstadoPrestamoHandler(BaseContext context)
+    public ModificarEstadoPrestamoHandler(BaseContext context, ITablaDetalleRepository tablaDetalleRepository)
     {
         this._context = context;
+        this._tablaDetalleRepository = tablaDetalleRepository;
     }
 
     public async Task<bool> Handle(ModificarEstadoPrestamoRequest request, CancellationToken cancellationToken)
     {
-        TablaDetalle? tablaDetalle = await _context.TablaDetalle.FirstOrDefaultAsync(x => x.TablaId == Constants.TablaId_EstadosPrestamos && x.Codigo.Equals(request.CodigoEstado));
-        if (tablaDetalle == null)
-            throw new BadRequestException(string.Format("No existe un código '{0}' de estado de prestamo.", request.CodigoEstado));
+        long estadoId = await _tablaDetalleRepository.ObtenerTablaDetalleId(Constants.TablaId_EstadosPrestamos, request.CodigoEstado);
 
         Prestamo? prestamo = await _context.Prestamo
             .Include(x => x.Cliente)
@@ -29,7 +30,7 @@ public class ModificarEstadoPrestamoHandler : IRequestHandler<ModificarEstadoPre
         if (prestamo == null)
             throw new BadRequestException(string.Format("No existe un prestamo con el ID {0} para el usuario logueado.", request.PrestamoId));
 
-        prestamo.EstadoId = tablaDetalle.TablaDetalleId;
+        prestamo.EstadoId = estadoId;
         prestamo.FechaAnulado = DateTime.Now;
         _context.Update(prestamo);
 

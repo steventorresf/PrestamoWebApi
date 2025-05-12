@@ -1,4 +1,5 @@
 using Application.Clientes.GuardarCliente;
+using Application.Clientes.ModificarEstadoCliente;
 using Application.Clientes.ObtenerClientes;
 using Application.Prestamos.CrearPrestamo;
 using Application.Prestamos.FinalizarPrestamo;
@@ -41,6 +42,7 @@ builder.Services.AddDbContext<BaseContext>(options =>
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddTransient<IRequestHandler<ObtenerClientesRequest, List<ObtenerClientesResponse>>, ObtenerClientesHandler>();
 builder.Services.AddTransient<IRequestHandler<GuardarClienteRequest, GuardarClienteResponse>, GuardarClienteHandler>();
+builder.Services.AddTransient<IRequestHandler<ModificarEstadoClienteRequest, bool>, ModificarEstadoClienteHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerUsuarioPorLoginRequest, ObtenerUsuarioPorLoginResponse>, ObtenerUsuarioPorLoginHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosPorClienteIdRequest, List<ObtenerPrestamosPorClienteIdResponse>>, ObtenerPrestamosPorClienteIdHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerTablaDetallesPorCodigosRequest, List<ObtenerTablaDetallesPorCodigosResponse>>, ObtenerTablaDetallesPorCodigosHandler>();

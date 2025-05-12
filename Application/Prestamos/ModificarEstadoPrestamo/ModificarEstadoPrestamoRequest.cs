@@ -2,9 +2,13 @@
 
 namespace Application.Prestamos.ModificarEstadoPrestamo;
 
-public class ModificarEstadoPrestamoRequest : IRequest<bool>
+public class ModificarEstadoPrestamoRequest : ModificarEstadoPrestamoDTO, IRequest<bool>
 {
     public int UsuarioId {  get; set; }
-    public long PrestamoId {  get; set; }
-    public string CodigoEstado {  get; set; } = string.Empty;
+}
+
+public class ModificarEstadoPrestamoDTO
+{
+    public long PrestamoId { get; set; }
+    public string CodigoEstado { get; set; } = string.Empty;
 }

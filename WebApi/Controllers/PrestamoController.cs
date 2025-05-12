@@ -38,11 +38,7 @@ namespace WebApi.Controllers
         [HttpGet("obtener-prestamos-por-cliente-id/{clienteId}")]
         public async Task<ActionResult<ResponseData<List<ObtenerPrestamosPorClienteIdResponse>>>> ObtenerPrestamosPorClienteId(long clienteId)
         {
-            ObtenerPrestamosPorClienteIdRequest request = new()
-            {
-                ClienteId = clienteId,
-                UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"])
-            };
+            ObtenerPrestamosPorClienteIdRequest request = new() { ClienteId = clienteId };
 
             ResponseData<List<ObtenerPrestamosPorClienteIdResponse>> Response = new()
             {
@@ -65,10 +61,11 @@ namespace WebApi.Controllers
             return Response;
         }
 
-        [HttpGet("obtener-prestamos-pendiente-por-usuario-id/{usuarioId}")]
-        public async Task<ActionResult<ResponseData<List<ObtenerPrestamosPendientesResponse>>>> ObtenerPrestamosPendientes(int usuarioId)
+        [HttpGet("obtener-prestamos-pendiente-por-usuario")]
+        public async Task<ActionResult<ResponseData<List<ObtenerPrestamosPendientesResponse>>>> ObtenerPrestamosPendientes()
         {
-            ObtenerPrestamosPendientesRequest request = new() { UsuarioId = usuarioId };
+            ObtenerPrestamosPendientesRequest request = new()
+            { UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]) };
 
             ResponseData<List<ObtenerPrestamosPendientesResponse>> Response = new()
             {
@@ -78,10 +75,11 @@ namespace WebApi.Controllers
             return Response;
         }
 
-        [HttpGet("obtener-prestamos-congelados-por-usuario-id/{usuarioId}")]
-        public async Task<ActionResult<ResponseData<List<ObtenerPrestamosCongeladosResponse>>>> ObtenerPrestamosCongelados(int usuarioId)
+        [HttpGet("obtener-prestamos-congelados-por-usuario")]
+        public async Task<ActionResult<ResponseData<List<ObtenerPrestamosCongeladosResponse>>>> ObtenerPrestamosCongelados()
         {
-            ObtenerPrestamosCongeladosRequest request = new() { UsuarioId = usuarioId };
+            ObtenerPrestamosCongeladosRequest request = new()
+            { UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]) };
 
             ResponseData<List<ObtenerPrestamosCongeladosResponse>> Response = new()
             {
@@ -91,10 +89,11 @@ namespace WebApi.Controllers
             return Response;
         }
 
-        [HttpGet("obtener-prestamos-anulados-por-usuario-id/{usuarioId}")]
-        public async Task<ActionResult<ResponseData<List<ObtenerPrestamosAnuladosResponse>>>> ObtenerPrestamosAnulados(int usuarioId)
+        [HttpGet("obtener-prestamos-anulados-por-usuario")]
+        public async Task<ActionResult<ResponseData<List<ObtenerPrestamosAnuladosResponse>>>> ObtenerPrestamosAnulados()
         {
-            ObtenerPrestamosAnuladosRequest request = new() { UsuarioId = usuarioId };
+            ObtenerPrestamosAnuladosRequest request = new()
+            { UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]) };
 
             ResponseData<List<ObtenerPrestamosAnuladosResponse>> Response = new()
             {
@@ -116,9 +115,15 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("modificar-estado-prestamo")]
-        public async Task<ActionResult<ResponseData<bool>>> ModificarEstadoPrestamo(ModificarEstadoPrestamoRequest request)
+        public async Task<ActionResult<ResponseData<bool>>> ModificarEstadoPrestamo([FromBody] ModificarEstadoPrestamoDTO requestDto)
         {
-            request.UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]);
+            ModificarEstadoPrestamoRequest request = new()
+            {
+                UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]),
+                PrestamoId = requestDto.PrestamoId,
+                CodigoEstado = requestDto.CodigoEstado
+            };
+
             ResponseData<bool> Response = new()
             {
                 Data = await _mediator.Send(request),

@@ -1,5 +1,7 @@
 ﻿using Application.Clientes.GuardarCliente;
+using Application.Clientes.ModificarEstadoCliente;
 using Application.Clientes.ObtenerClientes;
+using Domain.Exceptions;
 using Domain.Response;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +21,16 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("obtener-por-usuario-id")]
-        public async Task<ActionResult<ResponseData<List<ObtenerClientesResponse>>>> ObtenerTodos(string? textoFiltro)
+        [HttpGet("obtener-clientes-por-usuario")]
+        public async Task<ActionResult<ResponseData<List<ObtenerClientesResponse>>>> ObtenerTodos(string estado, string? textoFiltro)
         {
+            if (string.IsNullOrEmpty(estado))
+                throw new BadRequestException("El parametro 'estado' es obligatorio.");
+
             ObtenerClientesRequest request = new()
             {
                 UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]),
+                CodigoEstado = estado,
                 TextoFiltro = textoFiltro,
             };
 
@@ -37,13 +43,42 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("guardar-cliente")]
-        public async Task<ActionResult<ResponseData<GuardarClienteResponse>>> GuardarCliente([FromBody] GuardarClienteRequest request)
+        public async Task<ActionResult<ResponseData<GuardarClienteResponse>>> GuardarCliente([FromBody] GuardarClienteDTO requestDto)
         {
-            request.UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]);
+            GuardarClienteRequest request = new()
+            {
+                UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]),
+                ClienteId = requestDto.ClienteId,
+                TipoId = requestDto.TipoId,
+                Direccion = requestDto.Direccion,
+                GeneroId = requestDto.GeneroId,
+                Identificacion = requestDto.Identificacion,
+                NombreCompleto = requestDto.NombreCompleto,
+                TelCel = requestDto.TelCel
+            };
+
             ResponseData<GuardarClienteResponse> Response = new()
             {
                 Data = await _mediator.Send(request),
                 Message = "El cliente ha sido guardado exitosamente."
+            };
+            return Response;
+        }
+
+        [HttpPost("modificar-estado-cliente")]
+        public async Task<ActionResult<ResponseData<bool>>> ModificarEstadoCliente([FromBody] ModificarEstadoClienteDTO requestDto)
+        {
+            ModificarEstadoClienteRequest request = new()
+            {
+                UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]),
+                ClienteId = requestDto.ClienteId,
+                CodigoEstado = requestDto.CodigoEstado
+            };
+
+            ResponseData<bool> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "El estado del cliente ha sido modificado exitosamente."
             };
             return Response;
         }
