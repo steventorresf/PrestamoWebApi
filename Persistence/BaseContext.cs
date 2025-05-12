@@ -65,6 +65,7 @@ namespace Persistence
         }
 
         public virtual DbSet<DiaNoHabil> DiaNoHabil { get; set; }
+        public virtual DbSet<Movimiento> Movimiento { get; set; }
         public virtual DbSet<Prestamo> Prestamo { get; set; }
         public virtual DbSet<PrestamoDetalle> PrestamoDetalle { get; set; }
         public virtual DbSet<SystemError> SystemError { get; set; }

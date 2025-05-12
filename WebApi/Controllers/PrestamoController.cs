@@ -1,4 +1,6 @@
 ﻿using Application.Prestamos.CrearPrestamo;
+using Application.Prestamos.FinalizarPrestamo;
+using Application.Prestamos.ModificarEstadoPrestamo;
 using Application.Prestamos.ObtenerCalculoCuotas;
 using Application.Prestamos.ObtenerPrestamoDetalle;
 using Application.Prestamos.ObtenerPrestamosAnulados;
@@ -108,7 +110,39 @@ namespace WebApi.Controllers
             ResponseData<List<ObtenerCalculoCuotasResponse>> Response = new()
             {
                 Data = await _mediator.Send(request),
-                Message = "Registros Ok"
+                Message = "El cálculo se ha realizado exitosamente."
+            };
+            return Response;
+        }
+
+        [HttpPost("modificar-estado-prestamo")]
+        public async Task<ActionResult<ResponseData<bool>>> ModificarEstadoPrestamo(ModificarEstadoPrestamoRequest request)
+        {
+            request.UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]);
+            ResponseData<bool> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "El estado del prestamo ha sido modificado exitosamente."
+            };
+            return Response;
+        }
+
+        [HttpPost("finalizar-prestamo")]
+        public async Task<ActionResult<ResponseData<bool>>> FinalizarPrestamo(FinalizarPrestamoDTO requestDto)
+        {
+            FinalizarPrestamoRequest request = new()
+            {
+                UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]),
+                PrestamoId = requestDto.PrestamoId,
+                Capital = requestDto.Capital,
+                FechaPago = requestDto.FechaPago,
+                Intereses = requestDto.Intereses
+            };
+
+            ResponseData<bool> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "El prestamo ha sido finalizado exitosamente."
             };
             return Response;
         }

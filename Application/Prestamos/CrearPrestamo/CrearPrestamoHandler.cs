@@ -1,27 +1,32 @@
 ﻿using MediatR;
 using Persistence;
 using Persistence.Entities;
+using Persistence.Interfaces;
+using Persistence.Utilities;
 
 namespace Application.Prestamos.CrearPrestamo
 {
     public class CrearPrestamoHandler : IRequestHandler<CrearPrestamoRequest, bool>
     {
         private readonly BaseContext _context;
+        private readonly ITablaDetalleRepository _tablaDetalleRepository;
 
-        public CrearPrestamoHandler(BaseContext context)
+        public CrearPrestamoHandler(BaseContext context, ITablaDetalleRepository tablaDetalleRepository)
         {
             this._context = context;
+            this._tablaDetalleRepository = tablaDetalleRepository;
         }
 
         public async Task<bool> Handle(CrearPrestamoRequest request, CancellationToken cancellationToken)
         {
+            long estadoIdPendientePrestamo = await _tablaDetalleRepository.ObtenerTablaDetalleId(Constants.TablaId_EstadosPrestamos, Constants.CodigoEstado_Prestamo_Pendiente);
             Prestamo entity = new()
             {
                 PrestamoId = 0,
                 ClienteId = request.ClienteId,
                 PeriodoId = request.PeriodoId,
                 Dias = request.Dias,
-                EstadoId = request.EstadoId,
+                EstadoId = estadoIdPendientePrestamo,
                 FechaInicio = Convert.ToDateTime(request.FechaInicio),
                 FechaPrestamo = Convert.ToDateTime(request.FechaPrestamo),
                 NoCuotas = request.NoCuotas,

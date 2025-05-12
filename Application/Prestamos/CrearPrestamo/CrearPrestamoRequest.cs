@@ -12,7 +12,6 @@ public class CrearPrestamoRequest : IRequest<bool>
     public string FechaInicio { get; set; } = string.Empty;
     public int NoCuotas { get; set; }
     public long PeriodoId { get; set; }
-    public long EstadoId { get; set; }
     public List<CrearPrestamoDetalleRequest> PrestamoDetalle { get; set; } = new();
 }
 

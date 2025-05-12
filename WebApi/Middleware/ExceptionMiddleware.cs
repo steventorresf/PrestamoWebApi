@@ -1,6 +1,7 @@
 ﻿using Domain.Exceptions;
 using Newtonsoft.Json;
 using Persistence.Files;
+using System.Net;
 
 namespace WebApi.Middleware
 {
@@ -25,20 +26,33 @@ namespace WebApi.Middleware
                 httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 await httpContext.Response.WriteAsJsonAsync(new
                 {
-                    Title = "Acceso denegado",
-                    Message = ex.Message
+                    Status = HttpStatusCode.Unauthorized.ToString(),
+                    StatusCode = StatusCodes.Status401Unauthorized,
+                    ex.Message
                 });
             }
             catch(BadRequestException ex)
             {
                 httpContext.Response.ContentType = "application/json";
-                httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-                await httpContext.Response.WriteAsJsonAsync(new
+                httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;                
+                if (ex.Message.Contains("[") && ex.Message.Contains("]"))
                 {
-                    Title = "Parametros incorrectos",
-                    Message = "Revise los datos de entrada y vuelva a ejecutar el servicio.",
-                    Errors = JsonConvert.DeserializeObject<List<string>>(ex.Message)
-                });
+                    await httpContext.Response.WriteAsJsonAsync(new
+                    {
+                        Status = HttpStatusCode.BadRequest,
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Errors = JsonConvert.DeserializeObject<List<string>>(ex.Message)
+                    });
+                }
+                else
+                {
+                    await httpContext.Response.WriteAsJsonAsync(new
+                    {
+                        Status = HttpStatusCode.BadRequest.ToString(),
+                        StatusCode = StatusCodes.Status400BadRequest,
+                        ex.Message
+                    });
+                }
             }
             catch (Exception exception)
             {
@@ -47,7 +61,8 @@ namespace WebApi.Middleware
                 httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await httpContext.Response.WriteAsJsonAsync(new
                 {
-                    Title = "Error",
+                    Status = HttpStatusCode.InternalServerError.ToString(),
+                    StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "Error interno del servidor, por favor contacte a su administrador"
                 });
             }

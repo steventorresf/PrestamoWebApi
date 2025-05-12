@@ -2,12 +2,20 @@
 
 public class Constants
 {
-    public const int IdEst_Prestamo_Pendiente = 1;
-    public const int IdEst_Prestamo_Anulado = 2;
-    public const int IdPeri_PorAbonos = 2;
-    public const int IdPeri_Quincenal = 2;
-    public const int IdPeri_Semanal = 2;
-    public const int IdPeri_Mensual = 2;
+    public const long TablaId_EstadosPrestamos = 2;
+    public const long TablaId_DescripcionesMovimientos = 2;
+    public const long TablaId_PeriodosPrestamos = 2;
+
+    public const string CodigoEstado_Prestamo_Finalizado = "";
+    public const string CodigoEstado_Prestamo_Pendiente = "";
+    public const string CodigoEstado_Prestamo_Anulado = "";
+
+    public const string CodigoPeriodo_PorAbonos = "";
+    public const string CodigoPeriodo_Quincenal = "";
+    public const string CodigoPeriodo_Semanal = "";
+    public const string CodigoPeriodo_Mensual = "";
+
+    public const string CodigoDescripcion_Movimiento_FinPrestamo = "FP";
 
     // Meses 31
     public static string[] Meses31 = new string[] { "1", "3", "5", "7", "8", "10", "12" };

@@ -1,6 +1,8 @@
 using Application.Clientes.GuardarCliente;
 using Application.Clientes.ObtenerClientes;
 using Application.Prestamos.CrearPrestamo;
+using Application.Prestamos.FinalizarPrestamo;
+using Application.Prestamos.ModificarEstadoPrestamo;
 using Application.Prestamos.ObtenerCalculoCuotas;
 using Application.Prestamos.ObtenerPrestamoDetalle;
 using Application.Prestamos.ObtenerPrestamosAnulados;
@@ -17,6 +19,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Persistence;
 using Persistence.Files;
+using Persistence.Interfaces;
+using Persistence.Interfaces.Implementations;
 using System.Reflection;
 using System.Text;
 using WebApi.Filters;
@@ -46,7 +50,10 @@ builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosPendientesRequest,
 builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosCongeladosRequest, List<ObtenerPrestamosCongeladosResponse>>, ObtenerPrestamosCongeladosHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosAnuladosRequest, List<ObtenerPrestamosAnuladosResponse>>, ObtenerPrestamosAnuladosHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerCalculoCuotasRequest, List<ObtenerCalculoCuotasResponse>>, ObtenerCalculoCuotasHandler>();
+builder.Services.AddTransient<IRequestHandler<ModificarEstadoPrestamoRequest, bool>, ModificarEstadoPrestamoHandler>();
+builder.Services.AddTransient<IRequestHandler<FinalizarPrestamoRequest, bool>, FinalizarPrestamoHandler>();
 
+builder.Services.AddScoped<ITablaDetalleRepository, TablaDetalleRepository>();
 builder.Services.AddScoped<ILogErrorFile, LogErrorFile>();
 
 builder.Services.AddScoped<UserValidationFilter>();

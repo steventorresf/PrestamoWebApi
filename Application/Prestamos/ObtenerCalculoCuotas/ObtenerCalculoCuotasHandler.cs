@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Persistence.Entities;
+using Persistence.Interfaces;
 using Persistence.Utilities;
 
 namespace Application.Prestamos.ObtenerCalculoCuotas;
@@ -8,14 +10,19 @@ namespace Application.Prestamos.ObtenerCalculoCuotas;
 public class ObtenerCalculoCuotasHandler : IRequestHandler<ObtenerCalculoCuotasRequest, List<ObtenerCalculoCuotasResponse>>
 {
     private readonly BaseContext _context;
+    private readonly ITablaDetalleRepository _tablaDetalleRepository;
 
-    public ObtenerCalculoCuotasHandler(BaseContext context)
+    public ObtenerCalculoCuotasHandler(BaseContext context, ITablaDetalleRepository tablaDetalleRepository)
     {
         this._context = context;
+        this._tablaDetalleRepository = tablaDetalleRepository;
     }
 
     public async Task<List<ObtenerCalculoCuotasResponse>> Handle(ObtenerCalculoCuotasRequest request, CancellationToken cancellationToken)
     {
+        List<TablaDetalle> listaPeriodos =
+            await _tablaDetalleRepository.ObtenerTablaDetalles(Constants.TablaId_PeriodosPrestamos);
+
         DateTime FechaCuota = Convert.ToDateTime(request.FechaInicio);
         decimal ValorCuota = request.ValorTotal / request.NoCuotas;
         string CadenaCuota = ValorCuota.ToString();
@@ -31,7 +38,7 @@ public class ObtenerCalculoCuotasHandler : IRequestHandler<ObtenerCalculoCuotasR
         decimal temp = request.ValorTotal - (vc * request.NoCuotas);
         decimal[] v = ObtenerGanancias(request.ValorTotal - request.ValorPrestamo, request.NoCuotas);
         List<ObtenerCalculoCuotasResponse> Lista = new();
-        if (request.PeriodoId == Constants.IdPeri_PorAbonos)
+        if (request.PeriodoId == _tablaDetalleRepository.ObtenerTablaDetalleId(listaPeriodos, Constants.CodigoPeriodo_PorAbonos, Constants.TablaId_PeriodosPrestamos))
         {
             DateTime[] ListaDias = _context.DiaNoHabil.Where(x => x.UsuarioId == request.UsuarioId).Select(x => x.FechaDiaNoHabil).ToArray();
             for (int i = ind; i < request.NoCuotas; i++)
@@ -61,6 +68,9 @@ public class ObtenerCalculoCuotasHandler : IRequestHandler<ObtenerCalculoCuotasR
         }
         else
         {
+            long periodoSemanalId = _tablaDetalleRepository.ObtenerTablaDetalleId(listaPeriodos, Constants.CodigoPeriodo_Semanal, Constants.TablaId_PeriodosPrestamos);
+            long periodoQuincenalId = _tablaDetalleRepository.ObtenerTablaDetalleId(listaPeriodos, Constants.CodigoPeriodo_Quincenal, Constants.TablaId_PeriodosPrestamos);
+            long periodoMensualId = _tablaDetalleRepository.ObtenerTablaDetalleId(listaPeriodos, Constants.CodigoPeriodo_Mensual, Constants.TablaId_PeriodosPrestamos);
             if (temp > 0)
             {
                 ObtenerCalculoCuotasResponse obCuota = new()
@@ -70,13 +80,14 @@ public class ObtenerCalculoCuotasHandler : IRequestHandler<ObtenerCalculoCuotasR
                     Intereses = v[0]
                 };
                 Lista.Add(obCuota);
-                if (request.PeriodoId == Constants.IdPeri_Quincenal) { FechaCuota = ObtenerFechaQuincenal(FechaCuota); }
+                if (request.PeriodoId == periodoQuincenalId) { FechaCuota = ObtenerFechaQuincenal(FechaCuota); }
                 else
                 {
-                    FechaCuota = request.PeriodoId == Constants.IdPeri_Semanal ? FechaCuota.AddDays(7) : request.PeriodoId == Constants.IdPeri_Mensual ? FechaCuota.AddMonths(1) : FechaCuota.AddDays(1);
+                    FechaCuota = request.PeriodoId == periodoSemanalId ? FechaCuota.AddDays(7) : request.PeriodoId == periodoMensualId ? FechaCuota.AddMonths(1) : FechaCuota.AddDays(1);
                 }
                 ind = 1;
             }
+
             for (int i = ind; i < request.NoCuotas; i++)
             {
                 ObtenerCalculoCuotasResponse obPrestDeta = new()
@@ -86,10 +97,10 @@ public class ObtenerCalculoCuotasHandler : IRequestHandler<ObtenerCalculoCuotasR
                     Intereses = v[i]
                 };
                 Lista.Add(obPrestDeta);
-                if (request.PeriodoId == Constants.IdPeri_Quincenal) { FechaCuota = ObtenerFechaQuincenal(FechaCuota); }
+                if (request.PeriodoId == periodoQuincenalId) { FechaCuota = ObtenerFechaQuincenal(FechaCuota); }
                 else
                 {
-                    FechaCuota = request.PeriodoId == Constants.IdPeri_Semanal ? FechaCuota.AddDays(7) : request.PeriodoId == Constants.IdPeri_Mensual ? FechaCuota.AddMonths(1) : FechaCuota.AddDays(1);
+                    FechaCuota = request.PeriodoId == periodoSemanalId ? FechaCuota.AddDays(7) : request.PeriodoId == periodoMensualId ? FechaCuota.AddMonths(1) : FechaCuota.AddDays(1);
                 }
             }
         }
