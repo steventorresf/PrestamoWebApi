@@ -2,7 +2,7 @@
 
 namespace Application.Clientes.ModificarEstadoCliente;
 
-public class ModificarEstadoClienteRequest : ModificarEstadoClienteDTO, IRequest<bool>
+public class ModificarEstadoClienteRequest : ModificarEstadoClienteDTO, IRequest<ModificarEstadoClienteResponse>
 {
     public int UsuarioId {  get; set; }    
 }

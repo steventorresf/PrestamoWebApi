@@ -75,10 +75,12 @@ namespace WebApi.Controllers
                 CodigoEstado = requestDto.CodigoEstado
             };
 
+            ModificarEstadoClienteResponse Resultado = await _mediator.Send(request);
             ResponseData<bool> Response = new()
             {
-                Data = await _mediator.Send(request),
-                Message = "El estado del cliente ha sido modificado exitosamente."
+                Success = Resultado.Result,
+                Data = Resultado.Result,
+                Message = Resultado.Message
             };
             return Response;
         }

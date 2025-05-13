@@ -29,6 +29,12 @@ namespace Persistence
                 .HasForeignKey(p => p.EstadoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Prestamo>()
+                .HasOne(p => p.Cliente)
+                .WithMany(b => b.Prestamos)
+                .HasForeignKey(p => p.ClienteId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<PrestamoDetalle>()
                 .HasOne(p => p.Prestamo)
                 .WithMany(b => b.PrestamoDetalles)

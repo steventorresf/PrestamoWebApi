@@ -21,17 +21,20 @@ public class ModificarEstadoPrestamoHandler : IRequestHandler<ModificarEstadoPre
 
     public async Task<bool> Handle(ModificarEstadoPrestamoRequest request, CancellationToken cancellationToken)
     {
-        long estadoId = await _tablaDetalleRepository.ObtenerTablaDetalleId(Constants.TablaId_EstadosPrestamos, request.CodigoEstado);
-
         Prestamo? prestamo = await _context.Prestamo
-            .Include(x => x.Cliente)
+            .Include(x => x.Cliente).ThenInclude(x => x.Estado)
             .FirstOrDefaultAsync(x => x.PrestamoId == request.PrestamoId && x.Cliente.UsuarioId == request.UsuarioId);
 
         if (prestamo == null)
             throw new BadRequestException(string.Format("No existe un prestamo con el ID {0} para el usuario logueado.", request.PrestamoId));
 
+        if (request.CodigoEstado.Equals(Constants.CodigoEstado_Prestamo_Pendiente) && !prestamo.Cliente.Estado.Codigo.Equals(Constants.CodigoEstado_Cliente_Activo))
+            throw new BadRequestException("El prestamo no puede activarse, porque el cliente no se encuentra activo.");
+
+        long estadoId = await _tablaDetalleRepository.ObtenerTablaDetalleId(Constants.TablaId_EstadosPrestamos, request.CodigoEstado);
+
         prestamo.EstadoId = estadoId;
-        prestamo.FechaAnulado = DateTime.Now;
+        prestamo.FechaAnulado = request.CodigoEstado.Equals(Constants.CodigoEstado_Prestamo_Pendiente) ? null : DateTime.Now;
         _context.Update(prestamo);
 
         await _context.SaveChangesAsync();
