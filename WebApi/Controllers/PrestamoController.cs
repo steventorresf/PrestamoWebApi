@@ -1,6 +1,7 @@
 ﻿using Application.Prestamos.CrearPrestamo;
 using Application.Prestamos.FinalizarPrestamo;
 using Application.Prestamos.ModificarEstadoPrestamo;
+using Application.Prestamos.ObtenerBalanceGeneral;
 using Application.Prestamos.ObtenerCalculoCuotas;
 using Application.Prestamos.ObtenerPrestamoDetalle;
 using Application.Prestamos.ObtenerPrestamosAnulados;
@@ -99,6 +100,24 @@ namespace WebApi.Controllers
             {
                 Data = await _mediator.Send(request),
                 Message = "Registros Ok"
+            };
+            return Response;
+        }
+
+        [HttpGet("obtener-balance-general-por-usuario")]
+        public async Task<ActionResult<ResponseData<ObtenerBalanceGeneralResponse>>> ObtenerBalanceGeneral(string fechaInicial, string fechaFinal)
+        {
+            ObtenerBalanceGeneralRequest request = new()
+            {
+                UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]),
+                FechaInicial = fechaInicial,
+                FechaFinal = fechaFinal
+            };
+
+            ResponseData<ObtenerBalanceGeneralResponse> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "El balance se ha obtenido satisfactoriamente."
             };
             return Response;
         }

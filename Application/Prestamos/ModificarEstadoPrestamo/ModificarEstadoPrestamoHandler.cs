@@ -34,7 +34,7 @@ public class ModificarEstadoPrestamoHandler : IRequestHandler<ModificarEstadoPre
         long estadoId = await _tablaDetalleRepository.ObtenerTablaDetalleId(Constants.TablaId_EstadosPrestamos, request.CodigoEstado);
 
         prestamo.EstadoId = estadoId;
-        prestamo.FechaAnulado = request.CodigoEstado.Equals(Constants.CodigoEstado_Prestamo_Pendiente) ? null : DateTime.Now;
+        prestamo.FechaAnulado = request.CodigoEstado.Equals(Constants.CodigoEstado_Prestamo_Pendiente) || request.CodigoEstado.Equals(Constants.CodigoEstado_Prestamo_Finalizado) ? null : DateTime.Now;
         _context.Update(prestamo);
 
         await _context.SaveChangesAsync();
