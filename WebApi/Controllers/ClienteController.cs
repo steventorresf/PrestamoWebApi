@@ -9,7 +9,7 @@ using WebApi.Filters;
 
 namespace WebApi.Controllers
 {
-    [Route("api/cliente")]
+    [Route("api/clientes")]
     [ApiController]
     //[ServiceFilter(typeof(UserValidationFilter))]
     public class ClienteController : ControllerBase

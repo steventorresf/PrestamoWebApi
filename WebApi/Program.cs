@@ -1,6 +1,7 @@
 using Application.Clientes.GuardarCliente;
 using Application.Clientes.ModificarEstadoCliente;
 using Application.Clientes.ObtenerClientes;
+using Application.Movimientos.ObtenerMovimientosPorPrestamo;
 using Application.Prestamos.CrearPrestamo;
 using Application.Prestamos.FinalizarPrestamo;
 using Application.Prestamos.ModificarEstadoPrestamo;
@@ -56,6 +57,7 @@ builder.Services.AddTransient<IRequestHandler<ObtenerCalculoCuotasRequest, List<
 builder.Services.AddTransient<IRequestHandler<ObtenerBalanceGeneralRequest, ObtenerBalanceGeneralResponse>, ObtenerBalanceGeneralHandler>();
 builder.Services.AddTransient<IRequestHandler<ModificarEstadoPrestamoRequest, bool>, ModificarEstadoPrestamoHandler>();
 builder.Services.AddTransient<IRequestHandler<FinalizarPrestamoRequest, bool>, FinalizarPrestamoHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerMovimientosPorPrestamoRequest, List<ObtenerMovimientosPorPrestamoResponse>>, ObtenerMovimientosPorPrestamoHandler>();
 
 builder.Services.AddScoped<ITablaDetalleRepository, TablaDetalleRepository>();
 builder.Services.AddScoped<ILogErrorFile, LogErrorFile>();

@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/prestamo")]
+    [Route("api/prestamos")]
     [ApiController]
     public class PrestamoController : ControllerBase
     {
