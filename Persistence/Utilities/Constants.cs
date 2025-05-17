@@ -21,6 +21,7 @@ public class Constants
 
     public const long TablaId_DescripcionesMovimientos = 2;
     public const string CodigoDescripcion_Movimiento_FinPrestamo = "FP";
+    public const string CodigoDescripcion_Movimiento_AC = "AC";
 
     // Meses 31
     public static string[] Meses31 = new string[] { "1", "3", "5", "7", "8", "10", "12" };

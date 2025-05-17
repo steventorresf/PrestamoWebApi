@@ -1,6 +1,11 @@
 using Application.Clientes.GuardarCliente;
 using Application.Clientes.ModificarEstadoCliente;
 using Application.Clientes.ObtenerClientes;
+using Application.DiasNoHabiles.GuardarDiasNoHabiles;
+using Application.DiasNoHabiles.ObtenerDiasNoHabilesPorUsuario;
+using Application.Movimientos.EliminarMovimiento;
+using Application.Movimientos.GuardarMovimiento;
+using Application.Movimientos.ObtenerGanancias;
 using Application.Movimientos.ObtenerMovimientosPorPrestamo;
 using Application.Prestamos.CrearPrestamo;
 using Application.Prestamos.FinalizarPrestamo;
@@ -58,6 +63,11 @@ builder.Services.AddTransient<IRequestHandler<ObtenerBalanceGeneralRequest, Obte
 builder.Services.AddTransient<IRequestHandler<ModificarEstadoPrestamoRequest, bool>, ModificarEstadoPrestamoHandler>();
 builder.Services.AddTransient<IRequestHandler<FinalizarPrestamoRequest, bool>, FinalizarPrestamoHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerMovimientosPorPrestamoRequest, List<ObtenerMovimientosPorPrestamoResponse>>, ObtenerMovimientosPorPrestamoHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerGananciasRequest, List<ObtenerGananciasResponse>>, ObtenerGananciasHandler>();
+builder.Services.AddTransient<IRequestHandler<GuardarMovimientoRequest, bool>, GuardarMovimientoHandler>();
+builder.Services.AddTransient<IRequestHandler<EliminarMovimientoRequest, bool>, EliminarMovimientoHandler>();
+builder.Services.AddTransient<IRequestHandler<GuardarDiasNoHabilesRequest, bool>, GuardarDiasNoHabilesHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerDiasNoHabilesPorUsuarioRequest, List<ObtenerDiasNoHabilesPorUsuarioResponse>>, ObtenerDiasNoHabilesPorUsuarioHandler>();
 
 builder.Services.AddScoped<ITablaDetalleRepository, TablaDetalleRepository>();
 builder.Services.AddScoped<ILogErrorFile, LogErrorFile>();

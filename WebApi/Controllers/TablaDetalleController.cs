@@ -16,7 +16,7 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("obtener-por-codigos")]
+        [HttpGet("obtener-tablas-detalles-por-codigos")]
         public async Task<ActionResult<ResponseData<List<ObtenerTablaDetallesPorCodigosResponse>>>> ObtenerTablaDetallesPorCodigos(string codigos)
         {
             ObtenerTablaDetallesPorCodigosRequest request = new() { Codigos = codigos };
