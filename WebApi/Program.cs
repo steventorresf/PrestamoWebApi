@@ -17,6 +17,9 @@ using Application.Prestamos.ObtenerPrestamosAnulados;
 using Application.Prestamos.ObtenerPrestamosCongelados;
 using Application.Prestamos.ObtenerPrestamosPendientes;
 using Application.Prestamos.ObtenerPrestamosPorClienteId;
+using Application.PrestamosDetalles.GuardarAbono;
+using Application.PrestamosDetalles.GuardarCobro;
+using Application.PrestamosDetalles.GuardarPrestamoDetalle;
 using Application.TablaDetalles.ObtenerTablaDetallesPorCodigos;
 using Application.Usuarios.ObtenerUsuarioPorLogin;
 using Domain.DTO;
@@ -68,6 +71,9 @@ builder.Services.AddTransient<IRequestHandler<GuardarMovimientoRequest, bool>, G
 builder.Services.AddTransient<IRequestHandler<EliminarMovimientoRequest, bool>, EliminarMovimientoHandler>();
 builder.Services.AddTransient<IRequestHandler<GuardarDiasNoHabilesRequest, bool>, GuardarDiasNoHabilesHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerDiasNoHabilesPorUsuarioRequest, List<ObtenerDiasNoHabilesPorUsuarioResponse>>, ObtenerDiasNoHabilesPorUsuarioHandler>();
+builder.Services.AddTransient<IRequestHandler<GuardarPrestamoDetalleRequest, bool>, GuardarPrestamoDetalleHandler>();
+builder.Services.AddTransient<IRequestHandler<GuardarCobroRequest, bool>, GuardarCobroHandler>();
+builder.Services.AddTransient<IRequestHandler<GuardarAbonoRequest, bool>, GuardarAbonoHandler>();
 
 builder.Services.AddScoped<ITablaDetalleRepository, TablaDetalleRepository>();
 builder.Services.AddScoped<ILogErrorFile, LogErrorFile>();
