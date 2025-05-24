@@ -1,6 +1,9 @@
-﻿using Application.PrestamosDetalles.GuardarAbono;
+﻿using Application.PrestamosDetalles.AnularCobro;
+using Application.PrestamosDetalles.EliminarPrestamoDetalle;
+using Application.PrestamosDetalles.GuardarAbono;
 using Application.PrestamosDetalles.GuardarCobro;
 using Application.PrestamosDetalles.GuardarPrestamoDetalle;
+using Application.PrestamosDetalles.ObtenerGananciasEsperadas;
 using Domain.Response;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -63,6 +66,58 @@ namespace WebApi.Controllers
             {
                 Data = await _mediator.Send(request),
                 Message = "El abono ha sido guardado correctamente."
+            };
+            return Response;
+        }
+
+        [HttpPut("anular-cobro/{prestamoDetalleId}")]
+        public async Task<ActionResult<ResponseData<bool>>> AnularCobro(long prestamoDetalleId)
+        {
+            AnularCobroRequest request = new()
+            {
+                UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]),
+                PrestamoDetalleId = prestamoDetalleId
+            };
+
+            ResponseData<bool> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "El abono ha sido anulado correctamente."
+            };
+            return Response;
+        }
+
+        [HttpDelete("eliminar-prestamo-detalle/{prestamoDetalleId}")]
+        public async Task<ActionResult<ResponseData<bool>>> EliminarPrestamoDetalle(long prestamoDetalleId)
+        {
+            EliminarPrestamoDetalleRequest request = new()
+            {
+                UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]),
+                PrestamoDetalleId = prestamoDetalleId
+            };
+
+            ResponseData<bool> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "El registro ha sido eliminado permanentemente."
+            };
+            return Response;
+        }
+
+        [HttpGet("obtener-ganancias-esperadas")]
+        public async Task<ActionResult<ResponseData<List<ObtenerGananciasEsperadasResponse>>>> ObtenerGananciasEsperadas(string fechaInicial, string fechaFinal)
+        {
+            ObtenerGananciasEsperadasRequest request = new()
+            {
+                UsuarioId = Convert.ToInt32(HttpContext.Request.Headers["uid"]),
+                FechaInicial = fechaInicial,
+                FechaFinal = fechaFinal
+            };
+
+            ResponseData<List<ObtenerGananciasEsperadasResponse>> Response = new()
+            {
+                Data = await _mediator.Send(request),
+                Message = "Registros OK."
             };
             return Response;
         }

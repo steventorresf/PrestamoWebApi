@@ -17,9 +17,12 @@ using Application.Prestamos.ObtenerPrestamosAnulados;
 using Application.Prestamos.ObtenerPrestamosCongelados;
 using Application.Prestamos.ObtenerPrestamosPendientes;
 using Application.Prestamos.ObtenerPrestamosPorClienteId;
+using Application.PrestamosDetalles.AnularCobro;
+using Application.PrestamosDetalles.EliminarPrestamoDetalle;
 using Application.PrestamosDetalles.GuardarAbono;
 using Application.PrestamosDetalles.GuardarCobro;
 using Application.PrestamosDetalles.GuardarPrestamoDetalle;
+using Application.PrestamosDetalles.ObtenerGananciasEsperadas;
 using Application.TablaDetalles.ObtenerTablaDetallesPorCodigos;
 using Application.Usuarios.ObtenerUsuarioPorLogin;
 using Domain.DTO;
@@ -74,6 +77,9 @@ builder.Services.AddTransient<IRequestHandler<ObtenerDiasNoHabilesPorUsuarioRequ
 builder.Services.AddTransient<IRequestHandler<GuardarPrestamoDetalleRequest, bool>, GuardarPrestamoDetalleHandler>();
 builder.Services.AddTransient<IRequestHandler<GuardarCobroRequest, bool>, GuardarCobroHandler>();
 builder.Services.AddTransient<IRequestHandler<GuardarAbonoRequest, bool>, GuardarAbonoHandler>();
+builder.Services.AddTransient<IRequestHandler<AnularCobroRequest, bool>, AnularCobroHandler>();
+builder.Services.AddTransient<IRequestHandler<EliminarPrestamoDetalleRequest, bool>, EliminarPrestamoDetalleHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerGananciasEsperadasRequest, List<ObtenerGananciasEsperadasResponse>>, ObtenerGananciasEsperadasHandler>();
 
 builder.Services.AddScoped<ITablaDetalleRepository, TablaDetalleRepository>();
 builder.Services.AddScoped<ILogErrorFile, LogErrorFile>();
