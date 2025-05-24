@@ -26,6 +26,8 @@ public class Constants
     public const string CodigoDescripcion_Movimiento_PagoTotalCuota = "PA";
     public const string CodigoDescripcion_Movimiento_ExcedenteCuota = "EX";
 
+
+    public const string MensajeUsuarioIncorrecto = "El nombre de usuario y/o contraseña son incorrectos.";
     // Meses 31
     public static string[] Meses31 = new string[] { "1", "3", "5", "7", "8", "10", "12" };
 }

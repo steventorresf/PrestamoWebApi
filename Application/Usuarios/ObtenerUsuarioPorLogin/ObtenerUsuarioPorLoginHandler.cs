@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Persistence;
 using Persistence.Entities;
+using Persistence.Utilities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -69,13 +70,12 @@ public class ObtenerUsuarioPorLoginHandler : IRequestHandler<ObtenerUsuarioPorLo
         Usuario? usuario = await _context.Usuario
                 .FirstOrDefaultAsync(x => x.NombreUsuario.Equals(request.NombreUsuario));
 
-        List<string> errors = new List<string>() { "El nombre de usuario y/o contraseña son incorrectos." };
         if (usuario == null)            
-            throw new BadRequestException(JsonConvert.SerializeObject(errors));
+            throw new BadRequestException(Constants.MensajeUsuarioIncorrecto);
 
         bool usuarioValido = BCrypt.Net.BCrypt.Verify(request.Contrasena, usuario.Clave);
         if (!usuarioValido)
-            throw new BadRequestException(JsonConvert.SerializeObject(errors));
+            throw new BadRequestException(Constants.MensajeUsuarioIncorrecto);
 
         return usuario;
     }
