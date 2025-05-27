@@ -123,9 +123,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("calcular-cuotas-prestamo")]
-        public async Task<ActionResult<ResponseData<List<ObtenerCalculoCuotasResponse>>>> ObtenerCalculoCuotas(ObtenerCalculoCuotasRequest request)
+        public async Task<ActionResult<ResponseData<ObtenerCalculoCuotasResponse>>> ObtenerCalculoCuotas(ObtenerCalculoCuotasRequest request)
         {
-            ResponseData<List<ObtenerCalculoCuotasResponse>> Response = new()
+            ResponseData<ObtenerCalculoCuotasResponse> Response = new()
             {
                 Data = await _mediator.Send(request),
                 Message = "El cálculo se ha realizado exitosamente."

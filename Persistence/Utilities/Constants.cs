@@ -2,7 +2,7 @@
 
 public class Constants
 {
-    public const long TablaId_EstadosClientes = 1;
+    public const long TablaId_EstadosClientes = 6;
     public const string CodigoEstado_Cliente_Activo = "AC";
     public const string CodigoEstado_Cliente_Inactivo = "IN";
     public const string CodigoEstado_Cliente_Eliminado = "XX";
@@ -19,7 +19,7 @@ public class Constants
     public const string CodigoPeriodo_Semanal = "S";
     public const string CodigoPeriodo_Mensual = "M";
 
-    public const long TablaId_DescripcionesMovimientos = 2;
+    public const long TablaId_DescripcionesMovimientos = 4;
     public const string CodigoDescripcion_Movimiento_AbonoPrestamo = "AB";
     public const string CodigoDescripcion_Movimiento_FinPrestamo = "FP";
     public const string CodigoDescripcion_Movimiento_AC = "AC";

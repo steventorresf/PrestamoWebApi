@@ -13,7 +13,7 @@ namespace WebApi.Filters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            string token = context.HttpContext.Request.Headers["Authorization"];
+            string? token = context.HttpContext.Request.Headers["Authorization"];
             if (string.IsNullOrEmpty(token))
                 throw new UnauthorizedException("El token es requerido.");
 
@@ -25,7 +25,7 @@ namespace WebApi.Filters
             if (jwtSecurityToken.Payload.ValidTo < DateTime.UtcNow)
                 throw new UnauthorizedException("Su sesión ha caducado, por favor inicie sesión nuevamente.");
 
-            string sUid = context.HttpContext.Request.Headers["uid"];
+            string? sUid = context.HttpContext.Request.Headers["uid"];
             int.TryParse(sUid, out int iUid);
             if (string.IsNullOrEmpty(sUid) || iUid <= 0)
                 throw new UnauthorizedException("El usuario es invalido, por favor inicie sesión.");

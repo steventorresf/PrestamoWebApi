@@ -64,7 +64,7 @@ builder.Services.AddTransient<IRequestHandler<ObtenerPrestamoDetalleRequest, Lis
 builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosPendientesRequest, List<ObtenerPrestamosPendientesResponse>>, ObtenerPrestamosPendientesHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosCongeladosRequest, List<ObtenerPrestamosCongeladosResponse>>, ObtenerPrestamosCongeladosHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerPrestamosAnuladosRequest, List<ObtenerPrestamosAnuladosResponse>>, ObtenerPrestamosAnuladosHandler>();
-builder.Services.AddTransient<IRequestHandler<ObtenerCalculoCuotasRequest, List<ObtenerCalculoCuotasResponse>>, ObtenerCalculoCuotasHandler>();
+builder.Services.AddTransient<IRequestHandler<ObtenerCalculoCuotasRequest, ObtenerCalculoCuotasResponse>, ObtenerCalculoCuotasHandler>();
 builder.Services.AddTransient<IRequestHandler<ObtenerBalanceGeneralRequest, ObtenerBalanceGeneralResponse>, ObtenerBalanceGeneralHandler>();
 builder.Services.AddTransient<IRequestHandler<ModificarEstadoPrestamoRequest, bool>, ModificarEstadoPrestamoHandler>();
 builder.Services.AddTransient<IRequestHandler<FinalizarPrestamoRequest, bool>, FinalizarPrestamoHandler>();

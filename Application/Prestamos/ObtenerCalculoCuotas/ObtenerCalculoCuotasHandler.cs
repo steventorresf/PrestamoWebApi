@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Utilities;
+using System.Globalization;
 
 namespace Application.Prestamos.ObtenerCalculoCuotas;
 
-public class ObtenerCalculoCuotasHandler : IRequestHandler<ObtenerCalculoCuotasRequest, List<ObtenerCalculoCuotasResponse>>
+public class ObtenerCalculoCuotasHandler : IRequestHandler<ObtenerCalculoCuotasRequest, ObtenerCalculoCuotasResponse>
 {
     private readonly BaseContext _context;
 
@@ -14,7 +15,7 @@ public class ObtenerCalculoCuotasHandler : IRequestHandler<ObtenerCalculoCuotasR
         this._context = context;
     }
 
-    public async Task<List<ObtenerCalculoCuotasResponse>> Handle(ObtenerCalculoCuotasRequest request, CancellationToken cancellationToken)
+    public async Task<ObtenerCalculoCuotasResponse> Handle(ObtenerCalculoCuotasRequest request, CancellationToken cancellationToken)
     {
         DateTime FechaCuota = Convert.ToDateTime(request.FechaInicio);
         decimal ValorCuota = request.ValorTotal / request.NoCuotas;
@@ -30,17 +31,19 @@ public class ObtenerCalculoCuotasHandler : IRequestHandler<ObtenerCalculoCuotasR
         }
         decimal temp = request.ValorTotal - (vc * request.NoCuotas);
         decimal[] v = ObtenerGanancias(request.ValorTotal - request.ValorPrestamo, request.NoCuotas);
-        List<ObtenerCalculoCuotasResponse> Lista = new();
+        List<ObtenerCalculoCuotasDTO> Lista = new();
         if (request.PeriodoCod.Equals(Constants.CodigoPeriodo_PorAbonos))
         {
             DateTime[] ListaDias = _context.DiaNoHabil.Where(x => x.UsuarioId == request.UsuarioId).Select(x => x.FechaDiaNoHabil).ToArray();
             for (int i = ind; i < request.NoCuotas; i++)
             {
-                ObtenerCalculoCuotasResponse obCuota = new()
+                ObtenerCalculoCuotasDTO obCuota = new()
                 {
                     FechaCuota = FechaCuota,
+                    sFechaCuota = FechaCuota.ToString("dddd, dd 'de' MMMM 'de' yyyy", new CultureInfo("es-CO")),
                     Capital = vc - v[i],
-                    Intereses = v[i]
+                    Intereses = v[i],
+                    ValorTotal = vc
                 };
                 Lista.Add(obCuota);
                 FechaCuota = FechaCuota.AddDays(1);
@@ -63,11 +66,13 @@ public class ObtenerCalculoCuotasHandler : IRequestHandler<ObtenerCalculoCuotasR
         {
             if (temp > 0)
             {
-                ObtenerCalculoCuotasResponse obCuota = new()
+                ObtenerCalculoCuotasDTO obCuota = new()
                 {
                     FechaCuota = Convert.ToDateTime(request.FechaInicio),
+                    sFechaCuota = Convert.ToDateTime(request.FechaInicio).ToString("dddd, dd 'de' MMMM 'de' yyyy", new CultureInfo("es-CO")),
                     Capital = vc + temp - v[0],
-                    Intereses = v[0]
+                    Intereses = v[0],
+                    ValorTotal = vc + temp
                 };
                 Lista.Add(obCuota);
                 if (request.PeriodoCod.Equals(Constants.CodigoPeriodo_Quincenal)) { FechaCuota = ObtenerFechaQuincenal(FechaCuota); }
@@ -80,11 +85,13 @@ public class ObtenerCalculoCuotasHandler : IRequestHandler<ObtenerCalculoCuotasR
 
             for (int i = ind; i < request.NoCuotas; i++)
             {
-                ObtenerCalculoCuotasResponse obPrestDeta = new()
+                ObtenerCalculoCuotasDTO obPrestDeta = new()
                 {
                     FechaCuota = FechaCuota,
+                    sFechaCuota = FechaCuota.ToString("dddd, dd 'de' MMMM 'de' yyyy", new CultureInfo("es-CO")),
                     Capital = vc - v[i],
-                    Intereses = v[i]
+                    Intereses = v[i],
+                    ValorTotal = vc
                 };
                 Lista.Add(obPrestDeta);
                 if (request.PeriodoCod.Equals(Constants.CodigoPeriodo_Quincenal)) { FechaCuota = ObtenerFechaQuincenal(FechaCuota); }
@@ -94,7 +101,18 @@ public class ObtenerCalculoCuotasHandler : IRequestHandler<ObtenerCalculoCuotasR
                 }
             }
         }
-        return Lista;
+
+        decimal CapitalTotal = Lista.Sum(x => x.Capital);
+        decimal InteresesTotal = Lista.Sum(x => x.Intereses);
+        ObtenerCalculoCuotasResponse Resultado = new()
+        {
+            CapitalTotal = CapitalTotal,
+            InteresesTotal = InteresesTotal,
+            ValorTotal = CapitalTotal + InteresesTotal,
+            ListadoCuotas = Lista
+        };
+
+        return Resultado;
     }
 
 

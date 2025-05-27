@@ -11,7 +11,7 @@ namespace WebApi.Controllers
 {
     [Route("api/clientes")]
     [ApiController]
-    //[ServiceFilter(typeof(UserValidationFilter))]
+    [ServiceFilter(typeof(UserValidationFilter))]
     public class ClienteController : ControllerBase
     {
         private readonly IMediator _mediator;

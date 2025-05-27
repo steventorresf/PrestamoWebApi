@@ -2,7 +2,7 @@
 
 namespace Application.Prestamos.ObtenerCalculoCuotas;
 
-public class ObtenerCalculoCuotasRequest : IRequest<List<ObtenerCalculoCuotasResponse>>
+public class ObtenerCalculoCuotasRequest : IRequest<ObtenerCalculoCuotasResponse>
 {
     public int UsuarioId { get; set; }
     public string FechaInicio { get; set; } = string.Empty;

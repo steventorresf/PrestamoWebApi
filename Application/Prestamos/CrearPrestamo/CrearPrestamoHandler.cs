@@ -38,6 +38,8 @@ namespace Application.Prestamos.CrearPrestamo
                     PrestamoDetalleId = 0,
                     Capital = x.Capital,
                     Intereses = x.Intereses,
+                    AbonoCapital = 0,
+                    AbonoIntereses = 0,
                     FechaCuota = Convert.ToDateTime(x.FechaCuota)
                 }).ToList()
             };

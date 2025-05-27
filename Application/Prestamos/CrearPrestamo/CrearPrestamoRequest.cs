@@ -19,7 +19,5 @@ public class CrearPrestamoDetalleRequest
 {
     public int Capital { get; set; }
     public int Intereses { get; set; }
-    public int AbonoCapital { get; set; }
-    public int AbonoIntereses { get; set; }
     public string FechaCuota { get; set; } = string.Empty;
 }
